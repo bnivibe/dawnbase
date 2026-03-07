@@ -16,12 +16,12 @@ export const mockArticles: Article[] = [
   },
   {
     id: "b2c3d4e5-f6a7-8901-bcde-f12345678901",
-    title: "Next.js App Router 시작하기",
-    slug: "nextjs-app-router-시작하기",
+    title: "Getting Started with Next.js App Router",
+    slug: "getting-started-with-nextjs-app-router",
     content:
-      "# Next.js App Router\n\nNext.js 13부터 도입된 App Router는 React Server Components를 기반으로 한 새로운 라우팅 시스템입니다.\n\n## 주요 특징\n\n- 파일 기반 라우팅\n- 서버 컴포넌트 기본 지원\n- 레이아웃 중첩\n- 스트리밍 렌더링",
+      "# Next.js App Router\n\nThe App Router, introduced in Next.js 13, is a new routing system built on React Server Components.\n\n## Key Features\n\n- File-based routing\n- Server Components by default\n- Nested layouts\n- Streaming rendering",
     excerpt:
-      "Next.js 13부터 도입된 App Router는 React Server Components를 기반으로 한 새로운 라우팅 시스템입니다.",
+      "The App Router, introduced in Next.js 13, is a new routing system built on React Server Components.",
     status: "published",
     createdAt: new Date("2026-03-03T14:00:00Z"),
     updatedAt: new Date("2026-03-05T10:30:00Z"),
