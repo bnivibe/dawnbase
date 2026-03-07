@@ -1,61 +1,61 @@
 # ADR-004: Styling - Tailwind CSS + shadcn/ui
 
-## 상태 (Status)
+## Status
 Accepted
 
-## 날짜 (Date)
+## Date
 2026-03-07
 
-## 맥락 (Context)
-Dawnbase는 지식 위키 형태의 UI를 필요로 하며, 깔끔한 레이아웃, 읽기 좋은 타이포그래피, 다크/라이트 테마 지원, 그리고 접근성(a11y)이 중요합니다. 스타일링 솔루션은 개발 속도, 디자인 일관성, 커스터마이징 용이성, 그리고 유지보수성에 영향을 미칩니다.
+## Context
+Dawnbase requires a knowledge wiki-style UI with clean layouts, readable typography, dark/light theme support, and accessibility (a11y). The styling solution affects development speed, design consistency, customization flexibility, and maintainability.
 
-## 고려한 옵션 (Options Considered)
+## Options Considered
 
 ### 1. **CSS Modules**
-- 장점: CSS 표준에 가까움, 스코프 격리 자동, 별도 런타임 없음
-- 단점: 디자인 시스템 구축에 많은 수동 작업, 컴포넌트 라이브러리 부재, 테마 전환 복잡
+- Pros: Close to CSS standard, automatic scope isolation, no separate runtime
+- Cons: Requires significant manual work for design system construction, no component library, complex theme switching
 
 ### 2. **Tailwind CSS + shadcn/ui**
-- 장점: 유틸리티-퍼스트로 빠른 스타일링, shadcn/ui의 접근성 높은 컴포넌트(Radix UI 기반), 복사-붙여넣기 방식(의존성이 아님)으로 완전한 커스터마이징, CSS 변수 기반 다크 모드, VS Code IntelliSense 우수
-- 단점: HTML이 길어질 수 있음(클래스 나열), Tailwind 유틸리티 클래스 학습 필요
+- Pros: Fast styling with utility-first approach, accessible components from shadcn/ui (built on Radix UI), copy-paste approach (not a dependency) enables full customization, CSS variable-based dark mode, excellent VS Code IntelliSense
+- Cons: HTML can become lengthy (class enumeration), requires learning Tailwind utility classes
 
 ### 3. **Styled-components (CSS-in-JS)**
-- 장점: 동적 스타일링 강력, 컴포넌트 단위 스코프, 테마 프로바이더
-- 단점: 런타임 오버헤드, Server Components 비호환, 번들 크기 증가, React 18+ 스트리밍 SSR과 충돌 가능
+- Pros: Powerful dynamic styling, component-level scoping, theme provider
+- Cons: Runtime overhead, incompatible with Server Components, increased bundle size, potential conflicts with React 18+ streaming SSR
 
 ### 4. **MUI (Material UI)**
-- 장점: 완성도 높은 컴포넌트 라이브러리, Material Design 가이드라인, 풍부한 기능
-- 단점: 매우 큰 번들 크기, Material Design 고정 디자인, 커스터마이징 어려움, CSS-in-JS 런타임 문제
+- Pros: Highly polished component library, Material Design guidelines, rich features
+- Cons: Very large bundle size, fixed Material Design aesthetic, difficult customization, CSS-in-JS runtime issues
 
-## 결정 (Decision)
-**Tailwind CSS + shadcn/ui**를 스타일링 솔루션으로 선택합니다.
+## Decision
+**Tailwind CSS + shadcn/ui** is selected as the styling solution.
 
-## 이유 (Rationale)
+## Rationale
 
-1. **유틸리티-퍼스트 빠른 개발**: Tailwind CSS의 유틸리티 클래스를 사용하면 별도 CSS 파일 작성 없이 JSX 내에서 바로 스타일링할 수 있어 개발 속도가 빠릅니다.
+1. **Utility-first rapid development**: Using Tailwind CSS utility classes enables styling directly within JSX without writing separate CSS files, resulting in fast development speed.
 
-2. **shadcn/ui의 접근성**: shadcn/ui는 Radix UI Primitives 위에 구축되어 있어, 키보드 네비게이션, 스크린 리더 지원, ARIA 속성 등 접근성이 기본 내장되어 있습니다.
+2. **shadcn/ui accessibility**: shadcn/ui is built on top of Radix UI Primitives, providing built-in accessibility including keyboard navigation, screen reader support, and ARIA attributes.
 
-3. **복사-붙여넣기 방식**: shadcn/ui는 npm 패키지가 아닌 복사-붙여넣기 방식으로 컴포넌트를 추가합니다. 이는 소스 코드를 직접 소유하므로 완전한 커스터마이징이 가능하고, 외부 라이브러리의 breaking changes에 영향받지 않습니다.
+3. **Copy-paste approach**: shadcn/ui adds components via copy-paste rather than as an npm package. This means you directly own the source code, enabling full customization and immunity to external library breaking changes.
 
-4. **다크 모드 기본 지원**: Tailwind CSS의 `dark:` 변형자와 CSS 변수 기반 테마 시스템으로, 다크/라이트 모드 전환을 쉽게 구현할 수 있습니다.
+4. **Built-in dark mode support**: Dark/light mode switching can be easily implemented using Tailwind CSS's `dark:` modifier and the CSS variable-based theme system.
 
-5. **Server Components 호환**: Tailwind CSS는 런타임 JavaScript가 없는 순수 CSS로 컴파일되므로, React Server Components와 완벽하게 호환됩니다.
+5. **Server Components compatibility**: Tailwind CSS compiles to pure CSS without runtime JavaScript, making it fully compatible with React Server Components.
 
-6. **VS Code DX**: Tailwind CSS IntelliSense 확장으로 자동 완성, 클래스 미리보기, 린팅이 가능하여 개발자 경험이 우수합니다.
+6. **VS Code DX**: The Tailwind CSS IntelliSense extension provides auto-completion, class previews, and linting, delivering an excellent developer experience.
 
-## 결과 (Consequences)
+## Consequences
 
-### 긍정적 (Positive)
-- 빠른 UI 개발 속도 (유틸리티 클래스로 즉시 스타일링)
-- 접근성 높은 컴포넌트 (Radix UI 기반 shadcn/ui)
-- 완전한 커스터마이징 가능 (소스 코드 소유)
-- 다크/라이트 모드 쉬운 구현
-- 런타임 오버헤드 없음 (빌드 타임 CSS 생성)
-- Server Components와 완벽 호환
+### Positive
+- Fast UI development speed (instant styling with utility classes)
+- Highly accessible components (shadcn/ui built on Radix UI)
+- Full customization possible (source code ownership)
+- Easy dark/light mode implementation
+- No runtime overhead (build-time CSS generation)
+- Full compatibility with Server Components
 
-### 부정적 (Negative)
-- HTML에 클래스 이름이 길게 나열되어 가독성이 떨어질 수 있음 (컴포넌트 추상화로 완화)
-- Tailwind 유틸리티 클래스 체계의 초기 학습 비용
-- shadcn/ui 컴포넌트를 수동으로 추가/관리해야 함 (CLI 도구로 완화)
-- 디자인 시스템의 일관성을 개발자가 직접 유지해야 함 (tailwind.config 활용)
+### Negative
+- Long class name enumeration in HTML may reduce readability (mitigated by component abstraction)
+- Initial learning cost for the Tailwind utility class system
+- shadcn/ui components must be manually added/managed (mitigated by CLI tools)
+- Design system consistency must be maintained by developers (leveraging tailwind.config)

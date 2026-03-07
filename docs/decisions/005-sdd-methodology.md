@@ -1,63 +1,63 @@
 # ADR-005: Methodology - Spec-Driven Development (SDD)
 
-## 상태 (Status)
+## Status
 Accepted
 
-## 날짜 (Date)
+## Date
 2026-03-07
 
-## 맥락 (Context)
-Dawnbase는 여러 Phase에 걸쳐 점진적으로 확장되는 프로젝트로, 각 Phase의 요구사항을 명확히 정의하고 구현과 문서 사이의 일관성을 유지하는 것이 중요합니다. 특히 AI 에이전트(Claude 등)와 협업하여 개발하는 환경에서, 에이전트가 정확하게 따를 수 있는 명시적인 스펙이 필수적입니다.
+## Context
+Dawnbase is a project that incrementally expands across multiple Phases, making it critical to clearly define requirements for each Phase and maintain consistency between implementation and documentation. Especially in an environment where development is done in collaboration with AI agents (such as Claude), explicit specs that agents can accurately follow are essential.
 
-개발 방법론의 선택은 코드 품질, 개발 속도, 문서 유지보수, 그리고 AI 협업 효율성에 직접적인 영향을 미칩니다.
+The choice of development methodology directly impacts code quality, development speed, documentation maintenance, and AI collaboration efficiency.
 
-## 고려한 옵션 (Options Considered)
+## Options Considered
 
 ### 1. **TDD (Test-Driven Development)**
-- 장점: 테스트가 스펙 역할, 높은 코드 커버리지, 리팩토링 안전성
-- 단점: UI 중심 프로젝트에서 테스트 작성이 복잡, 초기 설정 비용 높음, 스펙이 코드(테스트)에 묻혀 비개발자가 읽기 어려움
+- Pros: Tests serve as specs, high code coverage, safe refactoring
+- Cons: Writing tests is complex for UI-centric projects, high initial setup cost, specs are buried in code (tests) making them difficult for non-developers to read
 
 ### 2. **BDD (Behavior-Driven Development)**
-- 장점: 비즈니스 언어로 스펙 작성 (Given-When-Then), 이해관계자 소통 용이
-- 단점: Gherkin 문법 학습 필요, 스펙과 코드 사이의 매핑이 간접적, AI 에이전트가 Gherkin을 코드로 변환하는 것이 비효율적
+- Pros: Specs written in business language (Given-When-Then), easy stakeholder communication
+- Cons: Requires learning Gherkin syntax, indirect mapping between specs and code, inefficient for AI agents to convert Gherkin to code
 
 ### 3. **SDD (Spec-Driven Development)**
-- 장점: 스펙이 문서이자 계약(contract), AI 에이전트가 스펙을 정확히 따를 수 있음, 스코프 크리프 방지, 명확한 수용 기준, Phase별 확장이 자연스러움
-- 단점: 사전 스펙 작성에 시간 투자 필요, 스펙과 구현의 동기화 노력 필요
+- Pros: Specs serve as both documentation and contracts, AI agents can follow specs precisely, prevents scope creep, clear acceptance criteria, natural Phase-by-Phase extension
+- Cons: Requires upfront time investment in spec writing, requires effort to keep specs and implementation in sync
 
-### 4. **Ad-hoc (비구조적)**
-- 장점: 초기 속도 빠름, 유연성 높음
-- 단점: 기술 부채 누적, 문서 부재, AI 에이전트에게 모호한 지시, Phase 간 일관성 부족
+### 4. **Ad-hoc (Unstructured)**
+- Pros: Fast initial speed, high flexibility
+- Cons: Accumulation of technical debt, lack of documentation, ambiguous instructions for AI agents, inconsistency between Phases
 
-## 결정 (Decision)
-**SDD (Spec-Driven Development)**를 개발 방법론으로 선택합니다.
+## Decision
+**SDD (Spec-Driven Development)** is selected as the development methodology.
 
-## 이유 (Rationale)
+## Rationale
 
-1. **스펙이 문서이자 계약**: 각 데이터 모델, API 엔드포인트, UI 컴포넌트, 사용자 플로우에 대한 스펙 문서가 존재합니다. 이 스펙은 구현의 기준이 되며, 스펙과 구현이 충돌하면 스펙이 우선합니다(Single Source of Truth).
+1. **Specs serve as both documentation and contracts**: Spec documents exist for each data model, API endpoint, UI component, and user flow. These specs serve as the basis for implementation, and when there is a conflict between spec and implementation, the spec takes priority (Single Source of Truth).
 
-2. **AI 에이전트 협업 최적화**: AI 에이전트는 명확하고 구조화된 지시를 따를 때 가장 정확한 결과를 생성합니다. SDD의 구조화된 스펙 문서는 AI 에이전트에게 정확한 구현 기준을 제공합니다.
+2. **Optimized for AI agent collaboration**: AI agents produce the most accurate results when following clear, structured instructions. SDD's structured spec documents provide AI agents with precise implementation criteria.
 
-3. **스코프 크리프 방지**: 각 Phase에서 구현할 범위가 스펙으로 명확히 정의되어 있으므로, "이것도 추가하면 좋겠다"는 식의 범위 확장을 방지할 수 있습니다.
+3. **Prevents scope creep**: Since the scope of implementation for each Phase is clearly defined in the specs, it prevents scope expansion such as "it would be nice to add this too."
 
-4. **명확한 수용 기준**: 스펙에 정의된 동작, 입출력, 에러 처리 등이 곧 수용 기준이 되어, 구현 완료 여부를 객관적으로 판단할 수 있습니다.
+4. **Clear acceptance criteria**: The behaviors, inputs/outputs, and error handling defined in specs serve as acceptance criteria, enabling objective assessment of implementation completion.
 
-5. **Phase별 확장의 자연스러움**: SDD는 각 Phase의 스펙을 독립적으로 작성할 수 있어, Phase 1의 스펙이 완성되고 구현된 후 Phase 2의 스펙을 작성하는 점진적 확장이 자연스럽습니다.
+5. **Natural Phase-by-Phase extension**: SDD allows specs for each Phase to be written independently, making incremental extension natural — write and implement Phase 1 specs, then write Phase 2 specs.
 
-6. **살아있는 문서**: 스펙은 프로젝트와 함께 진화하는 살아있는 문서입니다. 요구사항이 변경되면 스펙을 먼저 업데이트하고, 그 다음 코드를 변경하는 일관된 워크플로우를 유지합니다.
+6. **Living documentation**: Specs are living documents that evolve with the project. When requirements change, the spec is updated first, then the code is changed, maintaining a consistent workflow.
 
-## 결과 (Consequences)
+## Consequences
 
-### 긍정적 (Positive)
-- 모든 기능에 대한 명확한 스펙 문서 존재 (데이터 모델, API, UI, 플로우)
-- AI 에이전트가 정확한 구현 기준을 가지고 작업 가능
-- Phase별 스코프가 명확히 정의되어 범위 관리 용이
-- 스펙이 곧 프로젝트 문서 역할 (별도 문서 작성 불필요)
-- 새 개발자나 기여자가 프로젝트를 빠르게 이해 가능
-- 구현 완료 여부의 객관적 판단 가능
+### Positive
+- Clear spec documents exist for all features (data models, APIs, UI, flows)
+- AI agents can work with precise implementation criteria
+- Phase-by-Phase scope is clearly defined, making scope management easy
+- Specs serve as project documentation (no need for separate documentation)
+- New developers or contributors can quickly understand the project
+- Objective assessment of implementation completion is possible
 
-### 부정적 (Negative)
-- 구현 전 스펙 작성에 시간 투자 필요 (하지만 구현 시간 절감과 버그 감소로 상쇄)
-- 스펙과 실제 구현의 동기화를 지속적으로 관리해야 함
-- 빠른 프로토타이핑이 필요한 경우 스펙 작성이 병목이 될 수 있음
-- 스펙의 세부 수준을 적절히 조절하는 판단이 필요함 (너무 상세하면 유연성 저하, 너무 간략하면 모호성 발생)
+### Negative
+- Requires time investment in spec writing before implementation (but offset by reduced implementation time and fewer bugs)
+- Requires ongoing management to keep specs and actual implementation in sync
+- Spec writing can become a bottleneck when rapid prototyping is needed
+- Judgment is needed to set the appropriate level of spec detail (too detailed reduces flexibility, too brief introduces ambiguity)
