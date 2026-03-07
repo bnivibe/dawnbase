@@ -23,6 +23,22 @@
 # misc
 .DS_Store
 *.pem
+*.swp
+*.swo
+
+# IDE
+.idea/
+.vscode/
+
+# Claude Code / OMC
+.claude/
+.omc/
+
+# Turbopack cache
+.turbo/
+
+# Local database
+*.local.db
 
 # debug
 npm-debug.log*
