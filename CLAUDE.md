@@ -1,12 +1,16 @@
 # Dawnbase - Project Instructions
 
 ## Project Overview
-Dawn's Knowledge Archive - 배운 것들과 스크랩한 것들을 정리하는 지식 아카이빙 웹사이트.
+Dawn's Knowledge Archive — A personal knowledge archiving website for organizing things learned and scrapped.
+
+## Owner
+- Name: Dawn
+- Email exposure: OK (public repository, email in git history is acceptable)
 
 ## SDD (Spec-Driven Development) Rules
-- **Spec First:** 새 기능 구현 전에 반드시 `specs/` 디렉토리의 관련 스펙을 먼저 확인하거나 작성
-- **Spec is Truth:** 스펙 파일과 구현 코드가 불일치하면 스펙이 우선. 스펙을 업데이트하거나 코드를 스펙에 맞춰 수정
-- **Phase-based:** 현재 Phase에 해당하는 스펙만 구현. Phase 범위를 벗어나는 기능은 구현하지 않음
+- **Spec First:** Always check or write the relevant spec in `specs/` before implementing a new feature
+- **Spec is Truth:** If spec and implementation disagree, the spec takes priority. Update the spec or fix the code to match
+- **Phase-based:** Only implement specs for the current Phase. Do not implement features outside the current Phase scope
 
 ## Tech Stack
 - Next.js 15 (App Router, TypeScript, Turbopack)
@@ -17,15 +21,19 @@ Dawn's Knowledge Archive - 배운 것들과 스크랩한 것들을 정리하는 
 - Vercel (deployment)
 
 ## Directory Structure
-- `specs/` — SDD 스펙 (소스 오브 트루스)
-- `docs/plans/` — 플랜 히스토리
-- `docs/decisions/` — ADR (Architecture Decision Records)
-- `src/app/` — Next.js App Router 페이지/API
-- `src/components/` — React 컴포넌트
-- `src/lib/` — 비즈니스 로직, DB, 유틸리티
-- `src/hooks/` — 커스텀 React 훅
-- `src/types/` — TypeScript 타입
+- `specs/` — SDD specs (source of truth)
+- `docs/plans/` — Plan history (what to build)
+- `docs/decisions/` — ADR - Architecture Decision Records (why)
+- `src/app/` — Next.js App Router (pages, API routes)
+- `src/components/` — React components
+- `src/lib/` — Business logic, DB, utilities
+- `src/hooks/` — Custom React hooks
+- `src/types/` — TypeScript type definitions
 - `src/actions/` — Server Actions
+
+## Language Rules
+- All text in the project (code comments, documentation, specs, ADRs, plans, README, etc.) must be written in English
+- No Korean or other non-English text in any project files
 
 ## Conventions
 - Component files: PascalCase for components, kebab-case for file names
@@ -39,6 +47,20 @@ Dawn's Knowledge Archive - 배운 것들과 스크랩한 것들을 정리하는 
 - Branch prefix: `dev/claude/...`
 - Commit format: `[prefix] type: description`
 - All changes go through Pull Requests
+- Claude must NEVER merge PRs into `main` — the user handles merging via browser
+- Commits should be as granular and detailed as possible (one concern per commit)
+
+## Security Rules
+- Repository is PUBLIC (for portfolio purposes — design process and code are open to everyone)
+- Always perform a security check before committing: verify no sensitive data, secrets, or credentials are exposed
+- If sensitive content is found, either encrypt it or manage it locally on the user's machine
+- Never expose API keys, database passwords, or secret tokens in code or config files
+- Record security-related changes in `docs/decisions/` (ADR) with reasons and actions taken
+
+## Change Documentation
+- Always propose changes to the user first before proceeding
+- Record the reason and details of significant changes in `docs/decisions/` (ADR) or `docs/plans/`
+- Keep plan and decision history up to date
 
 ## Current Phase
-Phase 1: Foundation — 기본 프로젝트 구조 + 글(Article) CRUD
+Phase 1: Foundation — Project setup + Article CRUD
