@@ -40,8 +40,8 @@ Build a fully functional foundational application. This includes project scaffol
 - [x] Configure TypeScript, Tailwind CSS, App Router
 - [x] Configure ESLint
 - [ ] Initialize shadcn/ui
-- [ ] Set up Drizzle ORM + Supabase connection
-- [ ] Install and configure Zod
+- [x] Set up Drizzle ORM + Supabase connection
+- [x] Install and configure Zod
 
 ### Step 3: SDD Structure
 - [x] Create `specs/` directory structure
@@ -54,8 +54,8 @@ Build a fully functional foundational application. This includes project scaffol
   - [x] `specs/flows/create-article.flow.md`
 
 ### Step 4: Database Schema
-- [ ] Define Article table schema (Drizzle)
-- [ ] Generate and run migration files
+- [x] Define Article table schema (Drizzle)
+- [ ] Generate and run migration files (requires DATABASE_URL)
 - [ ] Prepare seed data (for development)
 
 ### Step 5: App Shell
@@ -104,7 +104,7 @@ User authentication (Supabase Auth), permission management, production deploymen
 | Repository | Done | GitHub repository created |
 | Scaffolding | In Progress | Next.js + Tailwind basic setup complete |
 | SDD Structure | Done | Spec templates and Phase 1 specs written |
-| Database Schema | Not Started | - |
-| App Shell | Not Started | - |
-| Article CRUD | Not Started | - |
+| Database Schema | In Progress | Drizzle schema defined; migration pending DATABASE_URL setup |
+| App Shell | In Progress | Layout, sidebar, header implemented |
+| Article CRUD | In Progress | API routes + UI implemented; repository connected to Drizzle |
 | PR & Review | Not Started | - |

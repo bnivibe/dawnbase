@@ -13,3 +13,4 @@ A list of Architecture Decision Records (ADRs) documenting the project's key tec
 | [007](./007-validation-zod.md) | Validation: Zod | Accepted | 2026-03-07 |
 | [008](./008-deployment-vercel.md) | Deployment: Vercel | Accepted | 2026-03-07 |
 | [009](./009-security-hardening.md) | Security Hardening for Public Repository | Accepted | 2026-03-07 |
+| [010](./010-database-integration.md) | Replace Mock Repository with Drizzle ORM | Accepted | 2026-03-07 |
