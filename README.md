@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dawnbase
+
+Dawn's Knowledge Archive — 배운 것들과 스크랩한 것들을 정리하는 개인 지식 아카이빙 웹사이트.
+
+## Tech Stack
+
+| Category | Technology |
+|----------|-----------|
+| Framework | Next.js 15 (App Router, TypeScript) |
+| Styling | Tailwind CSS v4 + shadcn/ui |
+| Database | PostgreSQL via Supabase |
+| ORM | Drizzle ORM |
+| Validation | Zod |
+| Deployment | Vercel |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 22+
+- npm 10+
+- Supabase account (for database)
+
+### Installation
+
+```bash
+git clone https://github.com/bnivibe/dawnbase.git
+cd dawnbase
+npm install
+```
+
+### Environment Setup
+
+```bash
+cp .env.example .env.local
+```
+
+Edit `.env.local` with your Supabase credentials:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+DATABASE_URL=postgresql://postgres:password@db.your-project.supabase.co:5432/postgres
+```
+
+### Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+dawnbase/
+  docs/
+    plans/          # Plan history (what to build)
+    decisions/      # ADR - Architecture Decision Records (why)
+  specs/            # SDD specs (source of truth)
+  src/
+    app/            # Next.js App Router (pages, API routes)
+    components/     # React components (ui, layout, articles)
+    lib/            # Business logic (db, validations, utils)
+    types/          # TypeScript type definitions
+```
 
-## Learn More
+## Development Methodology
 
-To learn more about Next.js, take a look at the following resources:
+This project follows **SDD (Spec-Driven Development)**:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Write specs in `specs/` before implementation
+2. Implement based on specs
+3. Track decisions in `docs/decisions/` (ADR)
+4. Track plans in `docs/plans/`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Roadmap
 
-## Deploy on Vercel
+| Phase | Name | Description | Status |
+|-------|------|-------------|--------|
+| 1 | Foundation | Project setup + Article CRUD | In Progress |
+| 2 | Organization | Categories, Tags, Collections, Search | Planned |
+| 3 | Intelligence | AI auto-tagging, summarization, semantic search | Planned |
+| 4 | Social | Authentication, multi-user, sharing | Planned |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Private project.
