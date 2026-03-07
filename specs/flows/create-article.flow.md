@@ -1,103 +1,103 @@
-# User Flow: 아티클 생성
+# User Flow: Article Creation
 
 > **Phase**: Phase 1
 > **Status**: Approved
 > **Last Updated**: 2026-03-07
 
-## 개요
+## Overview
 
-사용자가 새 아티클을 작성하고 저장(Draft) 또는 발행(Publish)하는 엔드투엔드 플로우입니다. 사이드바 또는 아티클 목록에서 시작하여, 작성 폼을 거쳐 아티클 상세 페이지로 리다이렉트되는 전체 과정을 정의합니다.
+An end-to-end flow where the user writes a new article and saves it as Draft or publishes it. The flow starts from the sidebar or article list, goes through the creation form, and redirects to the article detail page.
 
-## 전제 조건
+## Prerequisites
 
-- 애플리케이션이 정상적으로 로드되어 있어야 합니다
-- Article 데이터베이스 테이블이 존재해야 합니다
-- Phase 1에서는 인증 없이 누구나 아티클을 생성할 수 있습니다
+- The application must be properly loaded
+- The Article database table must exist
+- In Phase 1, anyone can create articles without authentication
 
-## 플로우 다이어그램
+## Flow Diagram
 
 ```
-[사이드바 또는 아티클 목록]
+[Sidebar or Article List]
     |
-    | "New Article" 버튼 클릭
+    | Click "New Article" button
     v
-[/articles/new 페이지로 이동]
+[Navigate to /articles/new page]
     |
     v
-[아티클 작성 폼 표시]
+[Display article creation form]
     |
-    | title 입력 (필수)
-    | content 입력 (마크다운, 필수)
-    | excerpt 입력 (선택)
+    | Enter title (required)
+    | Enter content (markdown, required)
+    | Enter excerpt (optional)
     v
-[사용자 액션 선택]
+[User action selection]
     |
-    +--- "Save Draft" 클릭 ---------> [POST /api/articles, status: draft]
+    +--- Click "Save Draft" ---------> [POST /api/articles, status: draft]
     |                                      |
-    +--- "Publish" 클릭 ------------> [POST /api/articles, status: published]
+    +--- Click "Publish" ------------> [POST /api/articles, status: published]
                                            |
                               +------------+------------+
                               |                         |
-                         (성공: 201)               (실패: 400/500)
+                         (Success: 201)            (Failure: 400/500)
                               |                         |
                               v                         v
-                  [/articles/[id] 리다이렉트]    [에러 토스트 표시]
+                  [Redirect to /articles/[id]]   [Show error toast]
                               |                         |
                               v                         v
-                  [성공 토스트 표시]            [폼 유지, 입력값 보존]
+                  [Show success toast]          [Keep form, preserve input]
 ```
 
-## 단계별 상세
+## Step-by-Step Details
 
-### Step 1: "New Article" 버튼 클릭
+### Step 1: Click "New Article" Button
 
-| 항목 | 내용 |
-|------|------|
-| **페이지** | 아무 페이지 (사이드바는 모든 페이지에 존재) |
-| **사용자 액션** | 사이드바의 "New Article" 버튼 또는 아티클 목록 페이지(`/articles`)의 "New Article" 버튼 클릭 |
-| **시스템 반응** | `/articles/new` 경로로 클라이언트 사이드 네비게이션 |
-| **성공 조건** | 아티클 작성 폼이 표시됨 |
-| **실패 처리** | 네비게이션 실패 시 없음 (클라이언트 사이드 라우팅) |
+| Item | Details |
+|------|---------|
+| **Page** | Any page (sidebar exists on all pages) |
+| **User Action** | Click the "New Article" button in the sidebar or on the article list page (`/articles`) |
+| **System Response** | Client-side navigation to `/articles/new` route |
+| **Success Condition** | Article creation form is displayed |
+| **Failure Handling** | None for navigation failure (client-side routing) |
 
-**"New Article" 버튼 위치**:
-- 사이드바: Articles 네비게이션 항목 우측에 `+` 아이콘 버튼 (사이드바 접힘 시 숨김)
-- 아티클 목록 페이지: 헤더 영역 우측에 "New Article" 버튼 (+ 아이콘 + 텍스트)
+**"New Article" Button Locations**:
+- Sidebar: `+` icon button to the right of the Articles navigation item (hidden when sidebar is collapsed)
+- Article list page: "New Article" button (+ icon + text) at the top right of the header area
 
-### Step 2: 아티클 작성 폼 작성
+### Step 2: Fill Out Article Creation Form
 
-| 항목 | 내용 |
-|------|------|
-| **페이지** | `/articles/new` |
-| **사용자 액션** | 폼 필드에 내용 입력 |
-| **시스템 반응** | 실시간 유효성 피드백 (클라이언트 사이드) |
-| **성공 조건** | title과 content가 모두 입력됨 |
-| **실패 처리** | 필수 필드 미입력 시 submit 버튼 비활성화 + 인라인 에러 메시지 |
+| Item | Details |
+|------|---------|
+| **Page** | `/articles/new` |
+| **User Action** | Enter content in form fields |
+| **System Response** | Real-time validation feedback (client-side) |
+| **Success Condition** | Both title and content are entered |
+| **Failure Handling** | Submit button disabled when required fields are empty + inline error messages |
 
-**폼 필드 상세**:
+**Form Field Details**:
 
 | Field | Label | Type | Required | Placeholder | Validation |
 |-------|-------|------|----------|-------------|------------|
-| `title` | 제목 | `<input type="text">` | Yes | "아티클 제목을 입력하세요" | 1-200자 |
-| `content` | 내용 | `<textarea>` (Phase 1) | Yes | "마크다운으로 작성하세요..." | 1자 이상 |
-| `excerpt` | 요약 | `<textarea rows={2}>` | No | "비워두면 본문에서 자동 생성됩니다" | 0-300자 |
+| `title` | Title | `<input type="text">` | Yes | "Enter article title" | 1-200 chars |
+| `content` | Content | `<textarea>` (Phase 1) | Yes | "Write in markdown..." | 1+ chars |
+| `excerpt` | Summary | `<textarea rows={2}>` | No | "Leave empty to auto-generate from content" | 0-300 chars |
 
-**폼 레이아웃**:
+**Form Layout**:
 ```
 +--------------------------------------------------+
 | <- Back to Articles              New Article      |
 +--------------------------------------------------+
 |                                                  |
-| 제목 *                                            |
+| Title *                                          |
 | [                                          ]     |
 |                                                  |
-| 내용 * (Markdown)                                 |
+| Content * (Markdown)                             |
 | [                                          ]     |
 | [                                          ]     |
 | [                                          ]     |
 | [                                          ]     |
 | [              (auto-resize)               ]     |
 |                                                  |
-| 요약 (비워두면 자동 생성)                           |
+| Summary (leave empty to auto-generate)           |
 | [                                          ]     |
 | [                                          ]     |
 |                                                  |
@@ -107,120 +107,120 @@
 +--------------------------------------------------+
 ```
 
-**클라이언트 사이드 유효성 검사**:
-- title 입력 후 blur 시: 비어있으면 "제목을 입력해주세요" 에러
-- title 200자 초과 시: "제목은 200자 이하여야 합니다" 에러 + 글자 수 카운터 빨간색
-- content 비어있는 상태로 submit 시: "내용을 입력해주세요" 에러
-- excerpt 300자 초과 시: "요약은 300자 이하여야 합니다" 에러 + 글자 수 카운터 빨간색
+**Client-Side Validation**:
+- On title blur when empty: "Please enter a title" error
+- When title exceeds 200 chars: "Title must be 200 characters or less" error + red character counter
+- When submitting with empty content: "Please enter content" error
+- When excerpt exceeds 300 chars: "Summary must be 300 characters or less" error + red character counter
 
-### Step 3: 저장 액션 (Draft 또는 Publish)
+### Step 3: Save Action (Draft or Publish)
 
-| 항목 | 내용 |
-|------|------|
-| **페이지** | `/articles/new` |
-| **사용자 액션** | "Save Draft" 또는 "Publish" 버튼 클릭 |
-| **시스템 반응** | API 호출, 로딩 상태 표시, 결과에 따른 처리 |
-| **성공 조건** | API 201 Created 응답 |
-| **실패 처리** | 에러 토스트 + 폼 유지 |
+| Item | Details |
+|------|---------|
+| **Page** | `/articles/new` |
+| **User Action** | Click "Save Draft" or "Publish" button |
+| **System Response** | API call, loading state display, handling based on result |
+| **Success Condition** | API 201 Created response |
+| **Failure Handling** | Error toast + form preserved |
 
-**"Save Draft" 버튼**:
-- 스타일: secondary (outline) 버튼
-- 동작: `POST /api/articles` with `{ ...formData, status: 'draft' }`
+**"Save Draft" Button**:
+- Style: secondary (outline) button
+- Action: `POST /api/articles` with `{ ...formData, status: 'draft' }`
 
-**"Publish" 버튼**:
-- 스타일: primary 버튼
-- 동작: `POST /api/articles` with `{ ...formData, status: 'published' }`
+**"Publish" Button**:
+- Style: primary button
+- Action: `POST /api/articles` with `{ ...formData, status: 'published' }`
 
-**로딩 상태**:
-- 버튼 클릭 즉시 두 버튼 모두 `disabled` 처리
-- 클릭된 버튼에 spinner 표시 + 텍스트 변경 ("Saving..." / "Publishing...")
-- 폼 필드도 `disabled` 처리
+**Loading State**:
+- Immediately disable both buttons on click
+- Show spinner on the clicked button + change text ("Saving..." / "Publishing...")
+- Disable form fields as well
 
-### Step 4: 성공 처리
+### Step 4: Success Handling
 
-| 항목 | 내용 |
-|------|------|
-| **페이지** | `/articles/new` -> `/articles/[id]` |
-| **사용자 액션** | 없음 (자동) |
-| **시스템 반응** | 성공 토스트 표시 + 아티클 상세 페이지로 리다이렉트 |
-| **성공 조건** | 아티클 상세 페이지가 정상 표시됨 |
-| **실패 처리** | 리다이렉트 실패 시 토스트에 아티클 링크 포함 |
+| Item | Details |
+|------|---------|
+| **Page** | `/articles/new` -> `/articles/[id]` |
+| **User Action** | None (automatic) |
+| **System Response** | Show success toast + redirect to article detail page |
+| **Success Condition** | Article detail page displays correctly |
+| **Failure Handling** | Include article link in toast if redirect fails |
 
-**성공 토스트 메시지**:
-- Draft 저장: "아티클이 저장되었습니다" (info 스타일)
-- Publish: "아티클이 발행되었습니다" (success 스타일)
+**Success Toast Messages**:
+- Draft save: "Article has been saved" (info style)
+- Publish: "Article has been published" (success style)
 
-**리다이렉트**:
-- `router.push(/articles/${article.id})` 사용
-- 리다이렉트 후 사이드바의 최근 아티클 목록 자동 갱신
+**Redirect**:
+- Uses `router.push(/articles/${article.id})`
+- After redirect, automatically refresh the recent articles list in the sidebar
 
-### Step 5: 실패 처리
+### Step 5: Failure Handling
 
-| 항목 | 내용 |
-|------|------|
-| **페이지** | `/articles/new` (유지) |
-| **사용자 액션** | 에러 확인 후 수정 또는 재시도 |
-| **시스템 반응** | 에러 토스트 표시, 로딩 상태 해제, 폼 입력값 보존 |
-| **성공 조건** | 사용자가 에러를 확인하고 수정할 수 있는 상태 |
-| **실패 처리** | - |
+| Item | Details |
+|------|---------|
+| **Page** | `/articles/new` (preserved) |
+| **User Action** | Review error and correct or retry |
+| **System Response** | Show error toast, release loading state, preserve form input values |
+| **Success Condition** | User can see the error and make corrections |
+| **Failure Handling** | - |
 
-**에러 토스트 메시지**:
+**Error Toast Messages**:
 
-| HTTP Status | 토스트 메시지 | 스타일 |
-|-------------|-------------|--------|
-| 400 (Validation) | "입력값을 확인해주세요" + 각 필드 인라인 에러 표시 | error |
-| 500 | "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요." | error |
-| Network Error | "네트워크 연결을 확인해주세요." | error |
+| HTTP Status | Toast Message | Style |
+|-------------|---------------|-------|
+| 400 (Validation) | "Please check your input" + show inline errors for each field | error |
+| 500 | "A server error occurred. Please try again later." | error |
+| Network Error | "Please check your network connection." | error |
 
-## 관련 UI 컴포넌트
+## Related UI Components
 
 | Component | Spec | Role |
 |-----------|------|------|
-| `Sidebar` | [layout.spec.md](../ui/layout.spec.md) | "New Article" 버튼 제공 |
-| `ArticleForm` | Phase 1 구현 | 아티클 작성/수정 폼 |
-| `Toast` | Phase 1 구현 | 성공/에러 알림 표시 |
+| `Sidebar` | [layout.spec.md](../ui/layout.spec.md) | Provides the "New Article" button |
+| `ArticleForm` | Phase 1 implementation | Article creation/editing form |
+| `Toast` | Phase 1 implementation | Success/error notification display |
 
-## 관련 API
+## Related APIs
 
 | Endpoint | Spec | Purpose |
 |----------|------|---------|
-| `POST /api/articles` | [articles-api.spec.md](../api/articles-api.spec.md) | 아티클 생성 |
-| `GET /api/articles` | [articles-api.spec.md](../api/articles-api.spec.md) | 최근 아티클 목록 (사이드바 갱신용) |
+| `POST /api/articles` | [articles-api.spec.md](../api/articles-api.spec.md) | Article creation |
+| `GET /api/articles` | [articles-api.spec.md](../api/articles-api.spec.md) | Recent articles list (for sidebar refresh) |
 
-## 에러 시나리오
+## Error Scenarios
 
-### 네트워크 오류
-- **원인**: 인터넷 연결 끊김 또는 서버 다운
-- **감지**: `fetch` 호출 시 `TypeError` (network error)
-- **사용자 피드백**: "네트워크 연결을 확인해주세요." 에러 토스트
-- **복구 방법**: 연결 복구 후 동일 버튼 재클릭 (폼 입력값 보존됨)
+### Network Error
+- **Cause**: Internet connection lost or server down
+- **Detection**: `TypeError` (network error) when calling `fetch`
+- **User Feedback**: "Please check your network connection." error toast
+- **Recovery**: Re-click the same button after connection is restored (form input values preserved)
 
-### 서버 검증 실패
-- **원인**: 클라이언트 검증을 통과했지만 서버 검증에서 실패 (예: slug 중복 처리 실패)
-- **감지**: API 400 응답
-- **사용자 피드백**: "입력값을 확인해주세요." 에러 토스트 + 서버에서 반환된 필드별 에러 표시
-- **복구 방법**: 에러 필드 수정 후 재시도
+### Server Validation Failure
+- **Cause**: Passed client validation but failed server validation (e.g., slug duplicate handling failure)
+- **Detection**: API 400 response
+- **User Feedback**: "Please check your input." error toast + display field-specific errors returned by server
+- **Recovery**: Fix the error fields and retry
 
-### 서버 내부 오류
-- **원인**: DB 오류, 예기치 않은 서버 에러
-- **감지**: API 500 응답
-- **사용자 피드백**: "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요." 에러 토스트
-- **복구 방법**: 잠시 후 재시도 (폼 입력값 보존됨)
+### Server Internal Error
+- **Cause**: DB error, unexpected server error
+- **Detection**: API 500 response
+- **User Feedback**: "A server error occurred. Please try again later." error toast
+- **Recovery**: Retry after a moment (form input values preserved)
 
-## 엣지 케이스
+## Edge Cases
 
-1. **빈 제목으로 submit**: 클라이언트 사이드에서 차단. Submit 버튼은 title과 content 모두 입력되었을 때만 활성화.
-2. **매우 긴 마크다운 콘텐츠**: content 필드에 길이 제한 없음. textarea는 auto-resize. API에서는 DB 제한까지 허용.
-3. **동일 제목 아티클 생성**: slug 자동 생성 시 중복 처리. "my-article" -> "my-article-1" -> "my-article-2" 등.
-4. **빠른 더블 클릭**: 첫 클릭 즉시 버튼 disabled 처리로 중복 요청 방지.
-5. **브라우저 뒤로 가기**: 아티클 저장 성공 후 뒤로 가기 시 `/articles/new` 폼은 빈 상태로 초기화.
-6. **페이지 이탈 경고**: 폼에 내용이 입력된 상태에서 다른 페이지로 이동 시 "작성 중인 내용이 있습니다. 정말 나가시겠습니까?" 확인 다이얼로그 표시 (`beforeunload` 이벤트 + Next.js router event).
-7. **excerpt에 마크다운 입력**: excerpt는 plain text로 취급. 마크다운 문법이 입력되어도 그대로 저장 (렌더링 시 plain text로 표시).
+1. **Submit with empty title**: Blocked on client-side. Submit button is only enabled when both title and content are entered.
+2. **Very long markdown content**: No length limit on the content field. Textarea auto-resizes. API allows up to the DB limit.
+3. **Creating article with duplicate title**: Handled during slug auto-generation. "my-article" -> "my-article-1" -> "my-article-2", etc.
+4. **Rapid double-click**: Prevents duplicate requests by immediately disabling the button on first click.
+5. **Browser back navigation**: After successful article save, navigating back shows the `/articles/new` form reset to empty state.
+6. **Page departure warning**: When navigating away with content entered in the form, a confirmation dialog "You have unsaved content. Are you sure you want to leave?" is shown (`beforeunload` event + Next.js router event).
+7. **Markdown in excerpt**: Excerpt is treated as plain text. Even if markdown syntax is entered, it is saved as-is (displayed as plain text when rendered).
 
-## 상태 관리 (Client)
+## State Management (Client)
 
 ```typescript
-// 폼 상태
+// Form state
 interface ArticleFormState {
   title: string;
   content: string;
@@ -234,7 +234,7 @@ interface ArticleFormState {
   submitAction: 'draft' | 'publish' | null;
 }
 
-// 초기 상태
+// Initial state
 const initialState: ArticleFormState = {
   title: '',
   content: '',
@@ -245,22 +245,22 @@ const initialState: ArticleFormState = {
 };
 ```
 
-## 성공/완료 기준
+## Success/Completion Criteria
 
-- [ ] "New Article" 버튼이 사이드바와 아티클 목록에 모두 존재한다
-- [ ] `/articles/new` 경로에서 작성 폼이 표시된다
-- [ ] title과 content가 모두 입력되어야 submit 버튼이 활성화된다
-- [ ] 클라이언트 사이드 유효성 검사가 동작한다 (빈 값, 길이 제한)
-- [ ] "Save Draft" 클릭 시 status=draft로 아티클이 생성된다
-- [ ] "Publish" 클릭 시 status=published로 아티클이 생성된다
-- [ ] 생성 성공 시 아티클 상세 페이지로 리다이렉트된다
-- [ ] 성공/에러 토스트가 적절히 표시된다
-- [ ] 에러 발생 시 폼 입력값이 보존된다
-- [ ] submit 중 버튼이 disabled 처리되어 중복 요청이 방지된다
-- [ ] 폼 작성 중 페이지 이탈 시 확인 다이얼로그가 표시된다
+- [ ] "New Article" button exists in both the sidebar and article list
+- [ ] Article creation form is displayed at the `/articles/new` route
+- [ ] Submit button is only enabled when both title and content are entered
+- [ ] Client-side validation works (empty values, length limits)
+- [ ] Clicking "Save Draft" creates an article with status=draft
+- [ ] Clicking "Publish" creates an article with status=published
+- [ ] On successful creation, redirects to the article detail page
+- [ ] Success/error toasts are displayed appropriately
+- [ ] Form input values are preserved on error
+- [ ] Buttons are disabled during submission to prevent duplicate requests
+- [ ] Confirmation dialog is shown when leaving the page while form is being filled
 
-## 변경 이력
+## Changelog
 
 | Date | Change | Reason |
 |------|--------|--------|
-| 2026-03-07 | 최초 작성 | Phase 1 아티클 생성 플로우 스펙 |
+| 2026-03-07 | Initial creation | Phase 1 article creation flow spec |

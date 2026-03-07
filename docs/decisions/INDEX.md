@@ -1,6 +1,6 @@
 # Dawnbase Architecture Decision Records
 
-프로젝트의 주요 기술적 결정을 기록하는 ADR(Architecture Decision Record) 목록입니다.
+A list of Architecture Decision Records (ADRs) documenting the project's key technical decisions.
 
 | ADR | Title | Status | Date |
 |-----|-------|--------|------|

@@ -4,63 +4,63 @@
 > **Status**: Draft | Review | Approved | Implementing | Implemented | Verified
 > **Last Updated**: YYYY-MM-DD
 
-## 개요
+## Overview
 
-{이 데이터 모델이 무엇인지, 왜 필요한지 1-2문장으로 설명}
+{Explain in 1-2 sentences what this data model is and why it is needed}
 
-## 필드 정의
+## Field Definitions
 
 | Field | Type | Constraints | Default | Description |
 |-------|------|-------------|---------|-------------|
-| `id` | uuid | PK, auto-generated | `uuid()` | 고유 식별자 |
-| `fieldName` | string | required, max N chars | - | 설명 |
-| `createdAt` | timestamp | auto | `now()` | 생성 시각 |
-| `updatedAt` | timestamp | auto | `now()` | 수정 시각 |
+| `id` | uuid | PK, auto-generated | `uuid()` | Unique identifier |
+| `fieldName` | string | required, max N chars | - | Description |
+| `createdAt` | timestamp | auto | `now()` | Creation timestamp |
+| `updatedAt` | timestamp | auto | `now()` | Modification timestamp |
 
-## Enum 정의
+## Enum Definitions
 
 ### {EnumName}
 
 | Value | Description |
 |-------|-------------|
-| `value1` | 설명 |
-| `value2` | 설명 |
+| `value1` | Description |
+| `value2` | Description |
 
-## 관계 (Relationships)
+## Relationships
 
 | Relation | Target Model | Type | FK | Description |
 |----------|-------------|------|-----|-------------|
-| {relation} | {TargetModel} | 1:N / N:1 / N:M | `targetModelId` | 설명 |
+| {relation} | {TargetModel} | 1:N / N:1 / N:M | `targetModelId` | Description |
 
-## 인덱스 (Indexes)
+## Indexes
 
 | Name | Fields | Type | Purpose |
 |------|--------|------|---------|
-| `idx_{model}_{field}` | `fieldName` | UNIQUE / INDEX | 설명 |
+| `idx_{model}_{field}` | `fieldName` | UNIQUE / INDEX | Description |
 
-## Zod 스키마
+## Zod Schema
 
 ```typescript
 import { z } from 'zod';
 
 export const {ModelName}Schema = z.object({
-  // 필드 정의
+  // Field definitions
 });
 
 export type {ModelName} = z.infer<typeof {ModelName}Schema>;
 ```
 
-## Drizzle ORM 스키마
+## Drizzle ORM Schema
 
 ```typescript
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 
 export const {modelNames} = sqliteTable('{model_names}', {
-  // 컬럼 정의
+  // Column definitions
 });
 ```
 
-## 예시 데이터
+## Example Data
 
 ```json
 {
@@ -69,13 +69,13 @@ export const {modelNames} = sqliteTable('{model_names}', {
 }
 ```
 
-## 비즈니스 규칙
+## Business Rules
 
-1. {규칙 1}
-2. {규칙 2}
+1. {Rule 1}
+2. {Rule 2}
 
-## 변경 이력
+## Changelog
 
 | Date | Change | Reason |
 |------|--------|--------|
-| YYYY-MM-DD | 최초 작성 | Phase N 스펙 |
+| YYYY-MM-DD | Initial creation | Phase N spec |
