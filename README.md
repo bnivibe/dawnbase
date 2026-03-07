@@ -1,6 +1,6 @@
 # Dawnbase
 
-Dawn's Knowledge Archive — 배운 것들과 스크랩한 것들을 정리하는 개인 지식 아카이빙 웹사이트.
+Dawn's Knowledge Archive — A personal knowledge archiving website for organizing things learned and scrapped.
 
 ## Tech Stack
 
