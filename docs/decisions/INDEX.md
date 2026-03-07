@@ -12,3 +12,4 @@
 | [006](./006-project-structure.md) | Project Structure: Hybrid with SDD Overlay | Accepted | 2026-03-07 |
 | [007](./007-validation-zod.md) | Validation: Zod | Accepted | 2026-03-07 |
 | [008](./008-deployment-vercel.md) | Deployment: Vercel | Accepted | 2026-03-07 |
+| [009](./009-security-hardening.md) | Security Hardening for Public Repository | Accepted | 2026-03-07 |

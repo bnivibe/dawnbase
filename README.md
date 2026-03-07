@@ -40,7 +40,7 @@ Edit `.env.local` with your Supabase credentials:
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-DATABASE_URL=postgresql://postgres:password@db.your-project.supabase.co:5432/postgres
+DATABASE_URL=postgresql://postgres:YOUR_DB_PASSWORD@db.YOUR_PROJECT_REF.supabase.co:5432/postgres
 ```
 
 ### Development

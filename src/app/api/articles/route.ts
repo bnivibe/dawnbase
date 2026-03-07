@@ -49,11 +49,9 @@ export async function GET(request: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
+    console.error("[GET /api/articles]", error);
     return NextResponse.json(
-      {
-        error: "Failed to fetch articles",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
+      { error: "Failed to fetch articles" },
       { status: 500 },
     );
   }
@@ -78,11 +76,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ data: article }, { status: 201 });
   } catch (error) {
+    console.error("[POST /api/articles]", error);
     return NextResponse.json(
-      {
-        error: "Failed to create article",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
+      { error: "Failed to create article" },
       { status: 500 },
     );
   }
