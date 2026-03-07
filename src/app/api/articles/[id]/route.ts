@@ -41,11 +41,9 @@ export async function GET(
 
     return NextResponse.json({ data: article }, { status: 200 });
   } catch (error) {
+    console.error("[GET /api/articles/:id]", error);
     return NextResponse.json(
-      {
-        error: "Failed to fetch article",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
+      { error: "Failed to fetch article" },
       { status: 500 },
     );
   }
@@ -90,11 +88,9 @@ export async function PUT(
 
     return NextResponse.json({ data: updated }, { status: 200 });
   } catch (error) {
+    console.error("[PUT /api/articles/:id]", error);
     return NextResponse.json(
-      {
-        error: "Failed to update article",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
+      { error: "Failed to update article" },
       { status: 500 },
     );
   }
@@ -126,11 +122,9 @@ export async function DELETE(
 
     return NextResponse.json({ data: deleted }, { status: 200 });
   } catch (error) {
+    console.error("[DELETE /api/articles/:id]", error);
     return NextResponse.json(
-      {
-        error: "Failed to delete article",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
+      { error: "Failed to delete article" },
       { status: 500 },
     );
   }
