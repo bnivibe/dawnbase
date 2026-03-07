@@ -5,47 +5,47 @@
 > **Last Updated**: 2026-03-07
 > **Base Path**: `/api/articles`
 
-## 개요
+## Overview
 
-Article 리소스에 대한 CRUD API를 정의합니다. Next.js App Router의 Route Handlers를 사용하며, Zod를 이용한 입력 검증, 적절한 HTTP 상태 코드 반환, 일관된 에러 응답 형식을 따릅니다. 삭제는 소프트 삭제(status를 archived로 변경) 방식으로 처리합니다.
+Defines the CRUD API for the Article resource. Uses Next.js App Router Route Handlers with Zod-based input validation, appropriate HTTP status codes, and a consistent error response format. Deletion uses a soft delete approach (changing status to archived).
 
-## 엔드포인트 목록
+## Endpoint List
 
 | Method | Path | Description | Auth |
 |--------|------|-------------|------|
-| GET | `/api/articles` | 아티클 목록 조회 (페이지네이션, 필터링) | None (Phase 1) |
-| POST | `/api/articles` | 새 아티클 생성 | None (Phase 1) |
-| GET | `/api/articles/[id]` | 단건 아티클 조회 | None (Phase 1) |
-| PUT | `/api/articles/[id]` | 아티클 수정 | None (Phase 1) |
-| DELETE | `/api/articles/[id]` | 아티클 소프트 삭제 (archived) | None (Phase 1) |
+| GET | `/api/articles` | List articles (pagination, filtering) | None (Phase 1) |
+| POST | `/api/articles` | Create a new article | None (Phase 1) |
+| GET | `/api/articles/[id]` | Get a single article | None (Phase 1) |
+| PUT | `/api/articles/[id]` | Update an article | None (Phase 1) |
+| DELETE | `/api/articles/[id]` | Soft delete an article (archived) | None (Phase 1) |
 
-> **Phase 4 참고**: 인증(Auth) 추가 시 모든 쓰기 엔드포인트(POST, PUT, DELETE)에 인증 필수로 변경 예정.
+> **Phase 4 Note**: When authentication (Auth) is added, all write endpoints (POST, PUT, DELETE) will require authentication.
 
-## 파일 구조
+## File Structure
 
 ```
 src/app/api/articles/
-  route.ts              # GET (목록), POST (생성)
+  route.ts              # GET (list), POST (create)
   [id]/
-    route.ts            # GET (단건), PUT (수정), DELETE (삭제)
+    route.ts            # GET (single), PUT (update), DELETE (delete)
 ```
 
 ---
 
 ## GET `/api/articles`
 
-### 설명
-아티클 목록을 페이지네이션, 정렬, 상태 필터링과 함께 조회합니다. 기본적으로 `archived` 상태의 아티클은 제외합니다.
+### Description
+Retrieves the article list with pagination, sorting, and status filtering. By default, articles with `archived` status are excluded.
 
 ### Query Parameters
 
 | Parameter | Type | Required | Default | Description | Validation |
 |-----------|------|----------|---------|-------------|------------|
-| `page` | number | No | `1` | 페이지 번호 | >= 1, 정수 |
-| `limit` | number | No | `10` | 페이지당 항목 수 | 1-100, 정수 |
-| `sort` | string | No | `createdAt` | 정렬 기준 필드 | `createdAt` \| `updatedAt` \| `title` \| `publishedAt` |
-| `order` | string | No | `desc` | 정렬 방향 | `asc` \| `desc` |
-| `status` | string | No | - | 상태 필터 | `draft` \| `published` \| `archived` |
+| `page` | number | No | `1` | Page number | >= 1, integer |
+| `limit` | number | No | `10` | Items per page | 1-100, integer |
+| `sort` | string | No | `createdAt` | Sort field | `createdAt` \| `updatedAt` \| `title` \| `publishedAt` |
+| `order` | string | No | `desc` | Sort direction | `asc` \| `desc` |
+| `status` | string | No | - | Status filter | `draft` \| `published` \| `archived` |
 
 ### Query Parameter Validation (Zod)
 
@@ -59,12 +59,12 @@ const ListArticlesQuerySchema = z.object({
 });
 ```
 
-### 비즈니스 로직
+### Business Logic
 
-1. `status` 파라미터가 없으면 `draft`와 `published` 아티클만 반환 (`archived` 제외)
-2. `status` 파라미터가 있으면 해당 상태의 아티클만 반환
-3. 정렬 기준 필드와 방향에 따라 정렬
-4. 페이지네이션 적용: `offset = (page - 1) * limit`
+1. If the `status` parameter is not provided, return only `draft` and `published` articles (exclude `archived`)
+2. If the `status` parameter is provided, return only articles with that status
+3. Sort by the specified field and direction
+4. Apply pagination: `offset = (page - 1) * limit`
 
 ### Response
 
@@ -74,10 +74,10 @@ const ListArticlesQuerySchema = z.object({
   "data": [
     {
       "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-      "title": "Next.js App Router 시작하기",
-      "slug": "nextjs-app-router-시작하기",
+      "title": "Getting Started with Next.js App Router",
+      "slug": "getting-started-with-nextjs-app-router",
       "content": "# Next.js App Router\n\n...",
-      "excerpt": "Next.js 13부터 도입된 App Router는...",
+      "excerpt": "The App Router introduced in Next.js 13...",
       "status": "published",
       "createdAt": "2026-03-01T09:00:00.000Z",
       "updatedAt": "2026-03-05T14:30:00.000Z",
@@ -93,7 +93,7 @@ const ListArticlesQuerySchema = z.object({
 }
 ```
 
-**400 Bad Request** (잘못된 쿼리 파라미터)
+**400 Bad Request** (Invalid query parameters)
 ```json
 {
   "error": "Invalid query parameters",
@@ -118,16 +118,16 @@ const ListArticlesQuerySchema = z.object({
 
 ## POST `/api/articles`
 
-### 설명
-새 아티클을 생성합니다. 제목과 콘텐츠는 필수이며, slug는 제목에서 자동 생성, excerpt는 미입력 시 content에서 자동 생성됩니다.
+### Description
+Creates a new article. Title and content are required; slug is auto-generated from the title, and excerpt is auto-generated from content if not provided.
 
 ### Request Body
 
 ```json
 {
-  "title": "새 아티클 제목",
-  "content": "# 마크다운 콘텐츠\n\n본문 내용입니다.",
-  "excerpt": "선택적 요약 텍스트",
+  "title": "New Article Title",
+  "content": "# Markdown Content\n\nBody content here.",
+  "excerpt": "Optional summary text",
   "status": "draft"
 }
 ```
@@ -151,15 +151,15 @@ const CreateArticleSchema = z.object({
 });
 ```
 
-### 비즈니스 로직
+### Business Logic
 
-1. Request body를 Zod 스키마로 검증
-2. `title`에서 `slug` 자동 생성 (중복 시 숫자 접미사 추가)
-3. `excerpt` 미제공 시 `content`에서 자동 생성 (마크다운 제거, 최대 300자)
-4. `status`가 `published`이면 `publishedAt`을 현재 시각으로 설정
-5. `id`는 `crypto.randomUUID()`로 자동 생성
-6. `createdAt`, `updatedAt`은 현재 시각으로 자동 설정
-7. DB에 저장 후 생성된 아티클 전체 반환
+1. Validate request body with Zod schema
+2. Auto-generate `slug` from `title` (append numeric suffix on duplicates)
+3. If `excerpt` is not provided, auto-generate from `content` (remove markdown, max 300 chars)
+4. If `status` is `published`, set `publishedAt` to the current time
+5. Auto-generate `id` with `crypto.randomUUID()`
+6. Auto-set `createdAt` and `updatedAt` to the current time
+7. Save to DB and return the full created article
 
 ### Response
 
@@ -168,10 +168,10 @@ const CreateArticleSchema = z.object({
 {
   "data": {
     "id": "d4e5f6a7-b8c9-0123-defg-456789012345",
-    "title": "새 아티클 제목",
-    "slug": "새-아티클-제목",
-    "content": "# 마크다운 콘텐츠\n\n본문 내용입니다.",
-    "excerpt": "마크다운 콘텐츠 본문 내용입니다.",
+    "title": "New Article Title",
+    "slug": "new-article-title",
+    "content": "# Markdown Content\n\nBody content here.",
+    "excerpt": "Markdown Content Body content here.",
     "status": "draft",
     "createdAt": "2026-03-07T12:00:00.000Z",
     "updatedAt": "2026-03-07T12:00:00.000Z",
@@ -209,20 +209,20 @@ const CreateArticleSchema = z.object({
 
 ## GET `/api/articles/[id]`
 
-### 설명
-ID로 단일 아티클을 조회합니다. `archived` 상태의 아티클도 조회 가능합니다.
+### Description
+Retrieves a single article by ID. Articles with `archived` status can also be retrieved.
 
 ### Path Parameters
 
 | Parameter | Type | Description | Validation |
 |-----------|------|-------------|------------|
-| `id` | string | 아티클 UUID | UUID 형식 |
+| `id` | string | Article UUID | UUID format |
 
-### 비즈니스 로직
+### Business Logic
 
-1. `id` 파라미터의 UUID 형식 검증
-2. DB에서 해당 ID의 아티클 조회
-3. 존재하지 않으면 404 반환
+1. Validate UUID format of the `id` parameter
+2. Look up the article with the given ID in the DB
+3. Return 404 if not found
 
 ### Response
 
@@ -231,10 +231,10 @@ ID로 단일 아티클을 조회합니다. `archived` 상태의 아티클도 조
 {
   "data": {
     "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-    "title": "Next.js App Router 시작하기",
-    "slug": "nextjs-app-router-시작하기",
+    "title": "Getting Started with Next.js App Router",
+    "slug": "getting-started-with-nextjs-app-router",
     "content": "# Next.js App Router\n\n...",
-    "excerpt": "Next.js 13부터 도입된 App Router는...",
+    "excerpt": "The App Router introduced in Next.js 13...",
     "status": "published",
     "createdAt": "2026-03-01T09:00:00.000Z",
     "updatedAt": "2026-03-05T14:30:00.000Z",
@@ -243,7 +243,7 @@ ID로 단일 아티클을 조회합니다. `archived` 상태의 아티클도 조
 }
 ```
 
-**400 Bad Request** (잘못된 ID 형식)
+**400 Bad Request** (Invalid ID format)
 ```json
 {
   "error": "Invalid article ID",
@@ -270,24 +270,24 @@ ID로 단일 아티클을 조회합니다. `archived` 상태의 아티클도 조
 
 ## PUT `/api/articles/[id]`
 
-### 설명
-기존 아티클을 수정합니다. 전달된 필드만 업데이트됩니다 (partial update). `slug`는 `title`이 변경되면 자동으로 재생성됩니다.
+### Description
+Updates an existing article. Only the provided fields are updated (partial update). The `slug` is automatically regenerated if the `title` is changed.
 
 ### Path Parameters
 
 | Parameter | Type | Description | Validation |
 |-----------|------|-------------|------------|
-| `id` | string | 아티클 UUID | UUID 형식 |
+| `id` | string | Article UUID | UUID format |
 
 ### Request Body
 
-모든 필드 optional (최소 하나 이상 필요):
+All fields optional (at least one required):
 
 ```json
 {
-  "title": "수정된 제목",
-  "content": "# 수정된 내용",
-  "excerpt": "수정된 요약",
+  "title": "Updated Title",
+  "content": "# Updated Content",
+  "excerpt": "Updated summary",
   "status": "published"
 }
 ```
@@ -317,16 +317,16 @@ const UpdateArticleSchema = z.object({
 );
 ```
 
-### 비즈니스 로직
+### Business Logic
 
-1. `id` 파라미터의 UUID 형식 검증
-2. DB에서 해당 아티클 존재 확인 (없으면 404)
-3. Request body를 Zod 스키마로 검증
-4. `title`이 변경되면 `slug` 재생성 (중복 검사 포함)
-5. `status`가 `published`로 변경되고 기존 `publishedAt`이 null이면 현재 시각으로 설정
-6. `status`가 `draft`로 변경되면 `publishedAt`을 null로 초기화
-7. `updatedAt`을 현재 시각으로 갱신
-8. DB 업데이트 후 수정된 아티클 전체 반환
+1. Validate UUID format of the `id` parameter
+2. Verify the article exists in the DB (return 404 if not found)
+3. Validate request body with Zod schema
+4. If `title` is changed, regenerate `slug` (including duplicate check)
+5. If `status` changes to `published` and existing `publishedAt` is null, set to the current time
+6. If `status` changes to `draft`, reset `publishedAt` to null
+7. Refresh `updatedAt` to the current time
+8. Update DB and return the full updated article
 
 ### Response
 
@@ -335,10 +335,10 @@ const UpdateArticleSchema = z.object({
 {
   "data": {
     "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-    "title": "수정된 제목",
-    "slug": "수정된-제목",
-    "content": "# 수정된 내용",
-    "excerpt": "수정된 요약",
+    "title": "Updated Title",
+    "slug": "updated-title",
+    "content": "# Updated Content",
+    "excerpt": "Updated summary",
     "status": "published",
     "createdAt": "2026-03-01T09:00:00.000Z",
     "updatedAt": "2026-03-07T15:00:00.000Z",
@@ -379,23 +379,23 @@ const UpdateArticleSchema = z.object({
 
 ## DELETE `/api/articles/[id]`
 
-### 설명
-아티클을 소프트 삭제합니다. 실제로 DB에서 삭제하지 않고, `status`를 `archived`로 변경합니다.
+### Description
+Soft deletes an article. Instead of actually deleting from the DB, the `status` is changed to `archived`.
 
 ### Path Parameters
 
 | Parameter | Type | Description | Validation |
 |-----------|------|-------------|------------|
-| `id` | string | 아티클 UUID | UUID 형식 |
+| `id` | string | Article UUID | UUID format |
 
-### 비즈니스 로직
+### Business Logic
 
-1. `id` 파라미터의 UUID 형식 검증
-2. DB에서 해당 아티클 존재 확인 (없으면 404)
-3. 이미 `archived` 상태인 경우에도 성공 응답 반환 (멱등성)
-4. `status`를 `archived`로 변경
-5. `updatedAt`을 현재 시각으로 갱신
-6. 변경된 아티클 반환
+1. Validate UUID format of the `id` parameter
+2. Verify the article exists in the DB (return 404 if not found)
+3. Return a success response even if already in `archived` status (idempotency)
+4. Change `status` to `archived`
+5. Refresh `updatedAt` to the current time
+6. Return the modified article
 
 ### Response
 
@@ -404,8 +404,8 @@ const UpdateArticleSchema = z.object({
 {
   "data": {
     "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-    "title": "삭제된 아티클",
-    "slug": "삭제된-아티클",
+    "title": "Deleted Article",
+    "slug": "deleted-article",
     "content": "...",
     "excerpt": "...",
     "status": "archived",
@@ -416,7 +416,7 @@ const UpdateArticleSchema = z.object({
 }
 ```
 
-**400 Bad Request** (잘못된 ID 형식)
+**400 Bad Request** (Invalid ID format)
 ```json
 {
   "error": "Invalid article ID",
@@ -441,20 +441,20 @@ const UpdateArticleSchema = z.object({
 
 ---
 
-## 공통 사양
+## Common Specifications
 
-### 에러 응답 형식
+### Error Response Format
 
-모든 에러 응답은 동일한 형식을 따릅니다:
+All error responses follow the same format:
 
 ```typescript
-// 일반 에러
+// General error
 interface ApiError {
   error: string;
   details?: string;
 }
 
-// 검증 에러
+// Validation error
 interface ApiValidationError {
   error: string;
   details: ValidationError[];
@@ -466,7 +466,7 @@ interface ValidationError {
 }
 ```
 
-### Zod 에러 변환 유틸리티
+### Zod Error Conversion Utility
 
 ```typescript
 function formatZodError(error: z.ZodError): ValidationError[] {
@@ -477,15 +477,15 @@ function formatZodError(error: z.ZodError): ValidationError[] {
 }
 ```
 
-### HTTP 상태 코드 요약
+### HTTP Status Code Summary
 
-| Status | 사용 케이스 |
-|--------|------------|
-| `200 OK` | 조회, 수정, 삭제 성공 |
-| `201 Created` | 생성 성공 |
-| `400 Bad Request` | 입력값 검증 실패, 잘못된 파라미터 |
-| `404 Not Found` | 리소스 없음 |
-| `500 Internal Server Error` | 서버 내부 오류 (DB 오류 등) |
+| Status | Use Case |
+|--------|----------|
+| `200 OK` | Successful read, update, delete |
+| `201 Created` | Successful creation |
+| `400 Bad Request` | Input validation failure, invalid parameters |
+| `404 Not Found` | Resource not found |
+| `500 Internal Server Error` | Server internal error (DB error, etc.) |
 
 ### Content-Type
 
@@ -494,11 +494,11 @@ function formatZodError(error: z.ZodError): ValidationError[] {
 
 ### CORS
 
-Phase 1에서는 별도 CORS 설정 불필요 (Same-origin). Phase 4에서 필요 시 추가.
+No separate CORS configuration needed in Phase 1 (Same-origin). Will be added in Phase 4 if needed.
 
-## 구현 참고
+## Implementation Notes
 
-### Route Handler 패턴
+### Route Handler Pattern
 
 ```typescript
 // src/app/api/articles/route.ts
@@ -507,9 +507,9 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    // 쿼리 파라미터 파싱 및 검증
-    // DB 조회
-    // 응답 반환
+    // Parse and validate query parameters
+    // Query DB
+    // Return response
     return NextResponse.json({ data, pagination }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
@@ -522,10 +522,10 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    // Zod 검증
-    // 슬러그 생성
-    // DB 저장
-    // 응답 반환
+    // Zod validation
+    // Generate slug
+    // Save to DB
+    // Return response
     return NextResponse.json({ data: article }, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -551,7 +551,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  // UUID 검증 -> 조회 -> 응답
+  // UUID validation -> query -> response
 }
 
 export async function PUT(
@@ -559,7 +559,7 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  // UUID 검증 -> body 검증 -> 업데이트 -> 응답
+  // UUID validation -> body validation -> update -> response
 }
 
 export async function DELETE(
@@ -567,12 +567,12 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  // UUID 검증 -> 존재 확인 -> status 변경 -> 응답
+  // UUID validation -> existence check -> status change -> response
 }
 ```
 
-## 변경 이력
+## Changelog
 
 | Date | Change | Reason |
 |------|--------|--------|
-| 2026-03-07 | 최초 작성 | Phase 1 Article CRUD API 스펙 |
+| 2026-03-07 | Initial creation | Phase 1 Article CRUD API spec |

@@ -5,35 +5,35 @@
 > **Last Updated**: YYYY-MM-DD
 > **Base Path**: `/api/{resource}`
 
-## 개요
+## Overview
 
-{이 API가 무엇을 하는지, 어떤 리소스를 다루는지 설명}
+{Explain what this API does and what resource it handles}
 
-## 엔드포인트 목록
+## Endpoint List
 
 | Method | Path | Description | Auth |
 |--------|------|-------------|------|
-| GET | `/api/{resource}` | 목록 조회 | {Required/None} |
-| POST | `/api/{resource}` | 생성 | {Required/None} |
-| GET | `/api/{resource}/[id]` | 단건 조회 | {Required/None} |
-| PUT | `/api/{resource}/[id]` | 수정 | {Required/None} |
-| DELETE | `/api/{resource}/[id]` | 삭제 | {Required/None} |
+| GET | `/api/{resource}` | List retrieval | {Required/None} |
+| POST | `/api/{resource}` | Creation | {Required/None} |
+| GET | `/api/{resource}/[id]` | Single item retrieval | {Required/None} |
+| PUT | `/api/{resource}/[id]` | Update | {Required/None} |
+| DELETE | `/api/{resource}/[id]` | Deletion | {Required/None} |
 
 ---
 
 ## GET `/api/{resource}`
 
-### 설명
-{엔드포인트 설명}
+### Description
+{Endpoint description}
 
 ### Query Parameters
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| `page` | number | No | `1` | 페이지 번호 |
-| `limit` | number | No | `10` | 페이지당 항목 수 |
-| `sort` | string | No | `createdAt` | 정렬 기준 필드 |
-| `order` | string | No | `desc` | 정렬 방향 (asc/desc) |
+| `page` | number | No | `1` | Page number |
+| `limit` | number | No | `10` | Items per page |
+| `sort` | string | No | `createdAt` | Sort field |
+| `order` | string | No | `desc` | Sort direction (asc/desc) |
 
 ### Response
 
@@ -62,8 +62,8 @@
 
 ## POST `/api/{resource}`
 
-### 설명
-{엔드포인트 설명}
+### Description
+{Endpoint description}
 
 ### Request Body
 
@@ -77,7 +77,7 @@
 
 ```typescript
 const Create{Resource}Schema = z.object({
-  // 필드 정의
+  // Field definitions
 });
 ```
 
@@ -107,14 +107,14 @@ const Create{Resource}Schema = z.object({
 
 ## GET `/api/{resource}/[id]`
 
-### 설명
-{엔드포인트 설명}
+### Description
+{Endpoint description}
 
 ### Path Parameters
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `id` | string (uuid) | 리소스 ID |
+| `id` | string (uuid) | Resource ID |
 
 ### Response
 
@@ -136,14 +136,14 @@ const Create{Resource}Schema = z.object({
 
 ## PUT `/api/{resource}/[id]`
 
-### 설명
-{엔드포인트 설명}
+### Description
+{Endpoint description}
 
 ### Path Parameters
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `id` | string (uuid) | 리소스 ID |
+| `id` | string (uuid) | Resource ID |
 
 ### Request Body
 
@@ -168,14 +168,14 @@ const Create{Resource}Schema = z.object({
 
 ## DELETE `/api/{resource}/[id]`
 
-### 설명
-{엔드포인트 설명}
+### Description
+{Endpoint description}
 
 ### Path Parameters
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `id` | string (uuid) | 리소스 ID |
+| `id` | string (uuid) | Resource ID |
 
 ### Response
 
@@ -195,7 +195,7 @@ const Create{Resource}Schema = z.object({
 
 ---
 
-## 공통 에러 형식
+## Common Error Format
 
 ```typescript
 interface ApiError {
@@ -209,15 +209,15 @@ interface ValidationError {
 }
 ```
 
-## 구현 참고
+## Implementation Notes
 
-- Next.js App Router Route Handlers 사용
-- 파일 위치: `src/app/api/{resource}/route.ts`, `src/app/api/{resource}/[id]/route.ts`
-- Zod를 이용한 request body validation
-- 적절한 HTTP status code 반환
+- Uses Next.js App Router Route Handlers
+- File location: `src/app/api/{resource}/route.ts`, `src/app/api/{resource}/[id]/route.ts`
+- Request body validation using Zod
+- Returns appropriate HTTP status codes
 
-## 변경 이력
+## Changelog
 
 | Date | Change | Reason |
 |------|--------|--------|
-| YYYY-MM-DD | 최초 작성 | Phase N 스펙 |
+| YYYY-MM-DD | Initial creation | Phase N spec |

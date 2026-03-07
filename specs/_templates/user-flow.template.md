@@ -4,85 +4,85 @@
 > **Status**: Draft | Review | Approved | Implementing | Implemented | Verified
 > **Last Updated**: YYYY-MM-DD
 
-## 개요
+## Overview
 
-{이 사용자 플로우가 무엇인지, 어떤 목표를 달성하는지 설명}
+{Explain what this user flow is and what goal it achieves}
 
-## 전제 조건
+## Prerequisites
 
-- {플로우 시작 전 충족되어야 하는 조건 1}
-- {플로우 시작 전 충족되어야 하는 조건 2}
+- {Condition 1 that must be met before starting the flow}
+- {Condition 2 that must be met before starting the flow}
 
-## 플로우 다이어그램
+## Flow Diagram
 
 ```
-[시작 상태]
+[Start State]
     |
     v
-[Step 1: 액션] --> (실패) --> [에러 처리]
+[Step 1: Action] --> (Failure) --> [Error Handling]
     |
-    v (성공)
-[Step 2: 액션] --> (실패) --> [에러 처리]
+    v (Success)
+[Step 2: Action] --> (Failure) --> [Error Handling]
     |
-    v (성공)
-[완료 상태]
+    v (Success)
+[Completion State]
 ```
 
-## 단계별 상세
+## Step-by-Step Details
 
-### Step 1: {액션 이름}
+### Step 1: {Action Name}
 
-| 항목 | 내용 |
-|------|------|
-| **페이지** | {해당 페이지 경로} |
-| **사용자 액션** | {사용자가 하는 행동} |
-| **시스템 반응** | {시스템이 하는 동작} |
-| **성공 조건** | {다음 단계로 넘어가는 조건} |
-| **실패 처리** | {실패 시 어떻게 처리하는지} |
+| Item | Details |
+|------|---------|
+| **Page** | {Page path} |
+| **User Action** | {What the user does} |
+| **System Response** | {What the system does} |
+| **Success Condition** | {Condition to proceed to the next step} |
+| **Failure Handling** | {How failures are handled} |
 
-### Step 2: {액션 이름}
+### Step 2: {Action Name}
 
-| 항목 | 내용 |
-|------|------|
-| **페이지** | {해당 페이지 경로} |
-| **사용자 액션** | {사용자가 하는 행동} |
-| **시스템 반응** | {시스템이 하는 동작} |
-| **성공 조건** | {다음 단계로 넘어가는 조건} |
-| **실패 처리** | {실패 시 어떻게 처리하는지} |
+| Item | Details |
+|------|---------|
+| **Page** | {Page path} |
+| **User Action** | {What the user does} |
+| **System Response** | {What the system does} |
+| **Success Condition** | {Condition to proceed to the next step} |
+| **Failure Handling** | {How failures are handled} |
 
-## 관련 UI 컴포넌트
+## Related UI Components
 
 | Component | Spec | Role |
 |-----------|------|------|
-| `{ComponentName}` | [{spec 링크}]({path}) | {역할} |
+| `{ComponentName}` | [{spec link}]({path}) | {Role} |
 
-## 관련 API
+## Related APIs
 
 | Endpoint | Spec | Purpose |
 |----------|------|---------|
-| `{METHOD} /api/{path}` | [{spec 링크}]({path}) | {용도} |
+| `{METHOD} /api/{path}` | [{spec link}]({path}) | {Purpose} |
 
-## 에러 시나리오
+## Error Scenarios
 
-### {에러 시나리오 1}
-- **원인**: {무엇이 이 에러를 유발하는지}
-- **감지**: {어떻게 에러를 감지하는지}
-- **사용자 피드백**: {사용자에게 어떻게 알려주는지}
-- **복구 방법**: {어떻게 정상 상태로 돌아가는지}
+### {Error Scenario 1}
+- **Cause**: {What triggers this error}
+- **Detection**: {How the error is detected}
+- **User Feedback**: {How the user is notified}
+- **Recovery**: {How to return to a normal state}
 
-## 엣지 케이스
+## Edge Cases
 
-1. {엣지 케이스 1}: {처리 방법}
-2. {엣지 케이스 2}: {처리 방법}
+1. {Edge case 1}: {How it is handled}
+2. {Edge case 2}: {How it is handled}
 
-## 성공/완료 기준
+## Success/Completion Criteria
 
-- [ ] {검증 가능한 완료 조건 1}
-- [ ] {검증 가능한 완료 조건 2}
-- [ ] {검증 가능한 완료 조건 3}
+- [ ] {Verifiable completion condition 1}
+- [ ] {Verifiable completion condition 2}
+- [ ] {Verifiable completion condition 3}
 
-## 변경 이력
+## Changelog
 
 | Date | Change | Reason |
 |------|--------|--------|
-| YYYY-MM-DD | 최초 작성 | Phase N 스펙 |
+| YYYY-MM-DD | Initial creation | Phase N spec |

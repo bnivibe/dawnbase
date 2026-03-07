@@ -5,94 +5,94 @@
 > **Last Updated**: YYYY-MM-DD
 > **File Path**: `src/components/{component-name}.tsx`
 
-## 개요
+## Overview
 
-{이 UI 컴포넌트가 무엇인지, 어떤 역할을 하는지 설명}
+{Explain what this UI component is and what role it plays}
 
-## 와이어프레임
+## Wireframe
 
 ```
 +--------------------------------------------------+
 |                                                  |
-|          ASCII 와이어프레임 또는 설명              |
+|          ASCII wireframe or description          |
 |                                                  |
 +--------------------------------------------------+
 ```
 
-## 컴포넌트 구조
+## Component Structure
 
 ```
 {ComponentName}/
-  {ComponentName}.tsx       # 메인 컴포넌트
-  {SubComponent}.tsx        # 하위 컴포넌트
+  {ComponentName}.tsx       # Main component
+  {SubComponent}.tsx        # Sub-component
 ```
 
-## Props 정의
+## Props Definition
 
 ```typescript
 interface {ComponentName}Props {
-  /** 설명 */
+  /** Description */
   propName: type;
-  /** 설명 (optional) */
+  /** Description (optional) */
   optionalProp?: type;
 }
 ```
 
-## 상태 관리
+## State Management
 
 | State | Type | Initial | Description |
 |-------|------|---------|-------------|
-| `stateName` | type | value | 설명 |
+| `stateName` | type | value | Description |
 
-## 동작 사양
+## Behavior Specifications
 
-### {동작 1}
-- 트리거: {어떤 액션으로 발생하는지}
-- 동작: {무엇이 일어나는지}
-- 결과: {최종 상태}
+### {Behavior 1}
+- Trigger: {What action triggers it}
+- Behavior: {What happens}
+- Result: {Final state}
 
-### {동작 2}
-- 트리거: {어떤 액션으로 발생하는지}
-- 동작: {무엇이 일어나는지}
-- 결과: {최종 상태}
+### {Behavior 2}
+- Trigger: {What action triggers it}
+- Behavior: {What happens}
+- Result: {Final state}
 
-## 스타일 사양
+## Style Specifications
 
-### 레이아웃
-- 배치: {flex/grid/absolute 등}
-- 크기: {width, height}
-- 간격: {padding, margin, gap}
+### Layout
+- Placement: {flex/grid/absolute, etc.}
+- Size: {width, height}
+- Spacing: {padding, margin, gap}
 
-### 반응형 브레이크포인트
+### Responsive Breakpoints
 
-| Breakpoint | 동작 |
-|------------|------|
-| < 768px (Mobile) | {동작 설명} |
-| 768px - 1024px (Tablet) | {동작 설명} |
-| > 1024px (Desktop) | {동작 설명} |
+| Breakpoint | Behavior |
+|------------|----------|
+| < 768px (Mobile) | {Behavior description} |
+| 768px - 1024px (Tablet) | {Behavior description} |
+| > 1024px (Desktop) | {Behavior description} |
 
-### 테마
+### Theme
 
 | Element | Light Mode | Dark Mode |
 |---------|------------|-----------|
-| 배경 | `{color}` | `{color}` |
-| 텍스트 | `{color}` | `{color}` |
-| 보더 | `{color}` | `{color}` |
+| Background | `{color}` | `{color}` |
+| Text | `{color}` | `{color}` |
+| Border | `{color}` | `{color}` |
 
-## 접근성 (A11y)
+## Accessibility (A11y)
 
-- 키보드 네비게이션: {지원 방식}
-- ARIA 속성: {필요한 aria 속성}
-- 스크린 리더: {고려 사항}
+- Keyboard navigation: {Support method}
+- ARIA attributes: {Required aria attributes}
+- Screen reader: {Considerations}
 
-## 의존성
+## Dependencies
 
 | Dependency | Purpose |
 |------------|---------|
-| `package` | 사용 목적 |
+| `package` | Purpose of use |
 
-## 변경 이력
+## Changelog
 
 | Date | Change | Reason |
 |------|--------|--------|
-| YYYY-MM-DD | 최초 작성 | Phase N 스펙 |
+| YYYY-MM-DD | Initial creation | Phase N spec |

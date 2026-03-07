@@ -5,11 +5,11 @@
 > **Last Updated**: 2026-03-07
 > **File Path**: `src/components/layout/`
 
-## 개요
+## Overview
 
-Dawnbase 애플리케이션의 전체 레이아웃을 정의합니다. 접이식 사이드바, 헤더, 메인 콘텐츠 영역으로 구성된 앱 셸(App Shell) 패턴을 사용합니다. 다크/라이트 모드를 지원하며, 모바일에서는 사이드바가 햄버거 메뉴로 전환됩니다.
+Defines the overall layout of the Dawnbase application. Uses an App Shell pattern consisting of a collapsible sidebar, header, and main content area. Supports dark/light mode, and on mobile the sidebar converts to a hamburger menu.
 
-## 와이어프레임
+## Wireframe
 
 ### Desktop (>= 768px)
 
@@ -71,7 +71,7 @@ Dawnbase 애플리케이션의 전체 레이아웃을 정의합니다. 접이식
 |                                                  |
 +--------------------------------------------------+
 
---- Hamburger 클릭 시 (Overlay) ---
+--- When Hamburger is Clicked (Overlay) ---
 
 +--------------------------------------------------+
 | SIDEBAR OVERLAY              [X Close]           |
@@ -90,24 +90,24 @@ Dawnbase 애플리케이션의 전체 레이아웃을 정의합니다. 접이식
 +--------------------------------------------------+
 ```
 
-## 컴포넌트 구조
+## Component Structure
 
 ```
 src/components/layout/
-  AppShell.tsx              # 전체 레이아웃 래퍼
-  Sidebar.tsx               # 사이드바 (네비게이션 + 최근 아티클)
-  Header.tsx                # 상단 헤더 바
-  MainContent.tsx           # 메인 콘텐츠 래퍼
-  ThemeToggle.tsx           # 다크/라이트 모드 토글 버튼
-  SidebarNavItem.tsx        # 사이드바 네비게이션 항목
-  RecentArticlesList.tsx    # 최근 아티클 퀵 링크 목록
+  AppShell.tsx              # Overall layout wrapper
+  Sidebar.tsx               # Sidebar (navigation + recent articles)
+  Header.tsx                # Top header bar
+  MainContent.tsx           # Main content wrapper
+  ThemeToggle.tsx           # Dark/light mode toggle button
+  SidebarNavItem.tsx        # Sidebar navigation item
+  RecentArticlesList.tsx    # Recent articles quick link list
 ```
 
-## 컴포넌트 상세
+## Component Details
 
 ### AppShell
 
-최상위 레이아웃 컴포넌트. `src/app/layout.tsx`에서 사용됩니다.
+Top-level layout component. Used in `src/app/layout.tsx`.
 
 ```typescript
 interface AppShellProps {
@@ -119,95 +119,95 @@ interface AppShellProps {
 
 ```typescript
 interface SidebarProps {
-  // 내부 상태로 관리 (collapsed/expanded)
+  // Managed as internal state (collapsed/expanded)
 }
 ```
 
-**상태 관리**:
+**State Management**:
 
 | State | Type | Initial | Description |
 |-------|------|---------|-------------|
-| `isCollapsed` | boolean | `false` | 사이드바 접힘 상태 (desktop) |
-| `isMobileOpen` | boolean | `false` | 모바일 오버레이 표시 상태 |
+| `isCollapsed` | boolean | `false` | Sidebar collapsed state (desktop) |
+| `isMobileOpen` | boolean | `false` | Mobile overlay visibility state |
 
-**네비게이션 항목**:
+**Navigation Items**:
 
 | Label | Icon | Path | Phase | Description |
 |-------|------|------|-------|-------------|
-| Dashboard | `LayoutDashboard` | `/` | 1 | 대시보드 (홈) |
-| Articles | `FileText` | `/articles` | 1 | 아티클 목록 |
-| Categories | `FolderTree` | `/categories` | 2 | 카테고리 관리 (비활성 표시) |
-| Search | `Search` | `/search` | 2 | 검색 (비활성 표시) |
+| Dashboard | `LayoutDashboard` | `/` | 1 | Dashboard (home) |
+| Articles | `FileText` | `/articles` | 1 | Article list |
+| Categories | `FolderTree` | `/categories` | 2 | Category management (shown as disabled) |
+| Search | `Search` | `/search` | 2 | Search (shown as disabled) |
 
-- Phase 2 항목은 Phase 1에서 네비게이션에 표시하되 `opacity-50 pointer-events-none` 스타일로 비활성 처리
-- 현재 경로에 해당하는 항목은 `bg-accent` 배경 + 볼드 텍스트로 하이라이트
+- Phase 2 items are displayed in the navigation in Phase 1 but styled as disabled with `opacity-50 pointer-events-none`
+- The item corresponding to the current route is highlighted with `bg-accent` background + bold text
 
-**최근 아티클 퀵 링크**:
-- 최근 생성/수정된 아티클 최대 5개 표시
-- 각 항목은 제목(최대 30자, 초과 시 truncate)과 status 뱃지 표시
-- 클릭 시 해당 아티클 상세 페이지로 이동
-- `isCollapsed` 상태에서는 숨김
+**Recent Articles Quick Links**:
+- Displays up to 5 recently created/modified articles
+- Each item shows the title (max 30 chars, truncated if exceeded) and a status badge
+- Clicking navigates to the article detail page
+- Hidden when in `isCollapsed` state
 
 ### Header
 
 ```typescript
 interface HeaderProps {
-  // props 없음 - 내부적으로 처리
+  // No props - handled internally
 }
 ```
 
-**구성 요소**:
-- **왼쪽**: 모바일 햄버거 버튼 (< 768px에서만 표시)
-- **중앙/왼쪽**: 검색바 placeholder (Phase 2에서 활성화, Phase 1에서는 비활성 input 표시)
-- **오른쪽**: 테마 토글 버튼 + "Dawn's Knowledge Base" 텍스트
+**Components**:
+- **Left**: Mobile hamburger button (shown only at < 768px)
+- **Center/Left**: Search bar placeholder (activated in Phase 2, shown as disabled input in Phase 1)
+- **Right**: Theme toggle button + "Dawn's Knowledge Base" text
 
 ### ThemeToggle
 
-다크/라이트 모드 전환 버튼.
+Dark/light mode switch button.
 
 ```typescript
-// next-themes 사용
+// Uses next-themes
 interface ThemeToggleProps {
-  // props 없음 - next-themes의 useTheme 훅 사용
+  // No props - uses next-themes useTheme hook
 }
 ```
 
-- 라이트 모드: Sun 아이콘 표시 (클릭하면 다크로 전환)
-- 다크 모드: Moon 아이콘 표시 (클릭하면 라이트로 전환)
-- 시스템 테마를 기본값으로 사용 (`defaultTheme="system"`)
-- 전환 시 부드러운 트랜지션 (`transition-colors duration-200`)
+- Light mode: Shows Sun icon (click to switch to dark)
+- Dark mode: Shows Moon icon (click to switch to light)
+- Uses system theme as default (`defaultTheme="system"`)
+- Smooth transition on switch (`transition-colors duration-200`)
 
-## 동작 사양
+## Behavior Specifications
 
-### 사이드바 접기/펼치기 (Desktop)
+### Sidebar Collapse/Expand (Desktop)
 
-- **트리거**: 사이드바 하단의 접기 버튼 클릭 (`<<` / `>>`)
-- **동작**:
-  - 접힘: 사이드바 너비 240px -> 64px, 텍스트 레이블 숨김, 아이콘만 표시
-  - 펼침: 사이드바 너비 64px -> 240px, 텍스트 레이블 표시
-  - 최근 아티클 섹션: 접힘 시 숨김, 펼침 시 표시
-- **결과**: `isCollapsed` 상태 토글, `localStorage`에 저장하여 새로고침 후에도 유지
-- **애니메이션**: `transition-all duration-300 ease-in-out`
+- **Trigger**: Click the collapse button at the bottom of the sidebar (`<<` / `>>`)
+- **Behavior**:
+  - Collapsed: Sidebar width 240px -> 64px, text labels hidden, icons only displayed
+  - Expanded: Sidebar width 64px -> 240px, text labels displayed
+  - Recent articles section: hidden when collapsed, shown when expanded
+- **Result**: `isCollapsed` state toggle, saved to `localStorage` to persist across page refreshes
+- **Animation**: `transition-all duration-300 ease-in-out`
 
-### 모바일 사이드바 열기/닫기
+### Mobile Sidebar Open/Close
 
-- **트리거 (열기)**: 헤더의 햄버거 아이콘 클릭
-- **트리거 (닫기)**: 오버레이 배경 클릭, X 버튼 클릭, 또는 네비게이션 항목 클릭
-- **동작**: 왼쪽에서 슬라이드인/아웃 오버레이 + 반투명 배경
-- **결과**: `isMobileOpen` 상태 토글
-- **애니메이션**: `transform translateX` + `transition duration-300`
-- **접근성**: 오버레이 열림 시 `body` 스크롤 잠금, `ESC` 키로 닫기
+- **Trigger (open)**: Click the hamburger icon in the header
+- **Trigger (close)**: Click the overlay background, click the X button, or click a navigation item
+- **Behavior**: Slide-in/out overlay from the left + semi-transparent background
+- **Result**: `isMobileOpen` state toggle
+- **Animation**: `transform translateX` + `transition duration-300`
+- **Accessibility**: Lock `body` scroll when overlay is open, close with `ESC` key
 
-### 테마 전환
+### Theme Switch
 
-- **트리거**: ThemeToggle 버튼 클릭
-- **동작**: `next-themes`의 `setTheme` 호출
-- **결과**: 전체 앱의 컬러 스키마 전환
-- **저장**: `localStorage`에 자동 저장 (next-themes 내장)
+- **Trigger**: Click the ThemeToggle button
+- **Behavior**: Calls `setTheme` from `next-themes`
+- **Result**: Switches the entire app's color scheme
+- **Storage**: Auto-saved to `localStorage` (built into next-themes)
 
-## 스타일 사양
+## Style Specifications
 
-### 레이아웃
+### Layout
 
 ```
 AppShell: flex flex-row h-screen w-screen overflow-hidden
@@ -217,43 +217,43 @@ AppShell: flex flex-row h-screen w-screen overflow-hidden
     MainContent: flex-1 overflow-y-auto p-6
 ```
 
-### 반응형 브레이크포인트
+### Responsive Breakpoints
 
-| Breakpoint | 동작 |
-|------------|------|
-| < 768px (Mobile) | 사이드바 숨김, 햄버거 메뉴로 전환, 오버레이 방식. 메인 콘텐츠 full width. |
-| 768px - 1024px (Tablet) | 사이드바 기본 접힘(아이콘만), 펼치기 가능. 메인 콘텐츠 적응형. |
-| > 1024px (Desktop) | 사이드바 기본 펼침(240px), 접기 가능. 메인 콘텐츠 넉넉한 여백. |
+| Breakpoint | Behavior |
+|------------|----------|
+| < 768px (Mobile) | Sidebar hidden, switches to hamburger menu, overlay mode. Main content full width. |
+| 768px - 1024px (Tablet) | Sidebar collapsed by default (icons only), can be expanded. Main content adaptive. |
+| > 1024px (Desktop) | Sidebar expanded by default (240px), can be collapsed. Main content with generous margins. |
 
-### 테마 색상
+### Theme Colors
 
 | Element | Light Mode | Dark Mode |
 |---------|------------|-----------|
-| 앱 배경 | `white` | `zinc-950` |
-| 사이드바 배경 | `gray-50` | `zinc-900` |
-| 사이드바 보더 | `gray-200` | `zinc-800` |
-| 헤더 배경 | `white` | `zinc-950` |
-| 헤더 보더 | `gray-200` | `zinc-800` |
-| 네비게이션 텍스트 | `gray-700` | `zinc-300` |
-| 네비게이션 활성 배경 | `gray-100` | `zinc-800` |
-| 네비게이션 활성 텍스트 | `gray-900` | `zinc-100` |
-| 네비게이션 호버 배경 | `gray-100` | `zinc-800/50` |
-| 로고 텍스트 | `gray-900` | `zinc-100` |
-| 메인 콘텐츠 배경 | `white` | `zinc-950` |
-| 일반 텍스트 | `gray-900` | `zinc-100` |
-| 비활성 항목 | `gray-400` | `zinc-600` |
+| App background | `white` | `zinc-950` |
+| Sidebar background | `gray-50` | `zinc-900` |
+| Sidebar border | `gray-200` | `zinc-800` |
+| Header background | `white` | `zinc-950` |
+| Header border | `gray-200` | `zinc-800` |
+| Navigation text | `gray-700` | `zinc-300` |
+| Navigation active background | `gray-100` | `zinc-800` |
+| Navigation active text | `gray-900` | `zinc-100` |
+| Navigation hover background | `gray-100` | `zinc-800/50` |
+| Logo text | `gray-900` | `zinc-100` |
+| Main content background | `white` | `zinc-950` |
+| General text | `gray-900` | `zinc-100` |
+| Disabled items | `gray-400` | `zinc-600` |
 
-### 사이드바 치수
+### Sidebar Dimensions
 
 | Property | Expanded | Collapsed |
 |----------|----------|-----------|
 | Width | 240px (`w-60`) | 64px (`w-16`) |
 | Padding | `p-4` | `p-2` |
-| Logo 영역 높이 | 56px (`h-14`) | 56px (`h-14`) |
-| Nav Item 높이 | 40px (`h-10`) | 40px (`h-10`) |
-| Nav Item 간격 | 4px (`gap-1`) | 4px (`gap-1`) |
+| Logo area height | 56px (`h-14`) | 56px (`h-14`) |
+| Nav item height | 40px (`h-10`) | 40px (`h-10`) |
+| Nav item gap | 4px (`gap-1`) | 4px (`gap-1`) |
 
-### 헤더 치수
+### Header Dimensions
 
 | Property | Value |
 |----------|-------|
@@ -261,34 +261,34 @@ AppShell: flex flex-row h-screen w-screen overflow-hidden
 | Padding | `px-4` |
 | Search Bar Width | `max-w-md` (Phase 2) |
 
-## 접근성 (A11y)
+## Accessibility (A11y)
 
-- **키보드 네비게이션**: Tab 키로 사이드바 -> 헤더 -> 메인 콘텐츠 순서로 이동
-- **ARIA 속성**:
-  - 사이드바: `role="navigation"`, `aria-label="Main navigation"`
-  - 사이드바 토글 버튼: `aria-expanded={!isCollapsed}`, `aria-label="Toggle sidebar"`
-  - 모바일 오버레이: `role="dialog"`, `aria-modal="true"`
-  - 테마 토글: `aria-label="Toggle dark mode"`
-  - 현재 페이지 네비게이션: `aria-current="page"`
-- **스크린 리더**: 네비게이션 항목에 Phase 2 비활성 항목은 `aria-disabled="true"` 추가
-- **모션 감소**: `prefers-reduced-motion` 미디어 쿼리 존중, 애니메이션 비활성화
+- **Keyboard navigation**: Tab key moves through sidebar -> header -> main content in order
+- **ARIA attributes**:
+  - Sidebar: `role="navigation"`, `aria-label="Main navigation"`
+  - Sidebar toggle button: `aria-expanded={!isCollapsed}`, `aria-label="Toggle sidebar"`
+  - Mobile overlay: `role="dialog"`, `aria-modal="true"`
+  - Theme toggle: `aria-label="Toggle dark mode"`
+  - Current page navigation: `aria-current="page"`
+- **Screen reader**: Phase 2 disabled items in navigation have `aria-disabled="true"` added
+- **Reduced motion**: Respects `prefers-reduced-motion` media query, disables animations
 
-## 의존성
+## Dependencies
 
 | Dependency | Purpose |
 |------------|---------|
-| `next-themes` | 다크/라이트 모드 전환 관리 |
-| `lucide-react` | 아이콘 (LayoutDashboard, FileText, FolderTree, Search, Sun, Moon, Menu, X, ChevronsLeft, ChevronsRight) |
+| `next-themes` | Dark/light mode switching management |
+| `lucide-react` | Icons (LayoutDashboard, FileText, FolderTree, Search, Sun, Moon, Menu, X, ChevronsLeft, ChevronsRight) |
 
-## 구현 참고
+## Implementation Notes
 
-### 파일 구조
+### File Structure
 
 ```
 src/
   app/
-    layout.tsx          # ThemeProvider + AppShell 래핑
-    page.tsx            # Dashboard 페이지
+    layout.tsx          # ThemeProvider + AppShell wrapping
+    page.tsx            # Dashboard page
   components/
     layout/
       AppShell.tsx
@@ -299,10 +299,10 @@ src/
       SidebarNavItem.tsx
       RecentArticlesList.tsx
   lib/
-    constants.ts        # 네비게이션 항목 정의
+    constants.ts        # Navigation item definitions
 ```
 
-### layout.tsx 구조
+### layout.tsx Structure
 
 ```tsx
 // src/app/layout.tsx
@@ -322,15 +322,15 @@ export default function RootLayout({ children }) {
 }
 ```
 
-### localStorage 키
+### localStorage Keys
 
 | Key | Value | Description |
 |-----|-------|-------------|
-| `dawnbase-sidebar-collapsed` | `"true"` / `"false"` | 사이드바 접힘 상태 |
-| `theme` | `"light"` / `"dark"` / `"system"` | 테마 설정 (next-themes 관리) |
+| `dawnbase-sidebar-collapsed` | `"true"` / `"false"` | Sidebar collapsed state |
+| `theme` | `"light"` / `"dark"` / `"system"` | Theme setting (managed by next-themes) |
 
-## 변경 이력
+## Changelog
 
 | Date | Change | Reason |
 |------|--------|--------|
-| 2026-03-07 | 최초 작성 | Phase 1 앱 셸 레이아웃 스펙 |
+| 2026-03-07 | Initial creation | Phase 1 app shell layout spec |
