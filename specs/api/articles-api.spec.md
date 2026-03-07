@@ -1,7 +1,7 @@
 # API Spec: Articles API
 
 > **Phase**: Phase 1
-> **Status**: Approved
+> **Status**: Implementing
 > **Last Updated**: 2026-03-07
 > **Base Path**: `/api/articles`
 
