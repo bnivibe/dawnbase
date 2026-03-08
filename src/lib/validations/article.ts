@@ -1,8 +1,11 @@
 import { z } from "zod";
 
-// Enum
+// Enums
 export const ArticleStatusEnum = z.enum(["draft", "published", "archived"]);
 export type ArticleStatus = z.infer<typeof ArticleStatusEnum>;
+
+export const SourceTypeEnum = z.enum(["youtube", "blog", "manual"]);
+export type SourceType = z.infer<typeof SourceTypeEnum>;
 
 // Create input schema
 export const CreateArticleSchema = z.object({
@@ -16,6 +19,8 @@ export const CreateArticleSchema = z.object({
     .max(300, "Excerpt must be 300 characters or less")
     .optional(),
   status: ArticleStatusEnum.default("draft"),
+  sourceUrl: z.url().optional(),
+  sourceType: SourceTypeEnum.optional(),
 });
 
 export type CreateArticleInput = z.infer<typeof CreateArticleSchema>;
@@ -35,6 +40,8 @@ export const UpdateArticleSchema = z
       .nullable()
       .optional(),
     status: ArticleStatusEnum.optional(),
+    sourceUrl: z.url().nullable().optional(),
+    sourceType: SourceTypeEnum.nullable().optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: "At least one field must be provided",
@@ -53,6 +60,8 @@ export const ArticleSchema = z.object({
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   publishedAt: z.coerce.date().nullable(),
+  sourceUrl: z.string().nullable(),
+  sourceType: SourceTypeEnum.nullable(),
 });
 
 export type Article = z.infer<typeof ArticleSchema>;
