@@ -43,11 +43,16 @@ Dawn's Knowledge Archive — A personal knowledge archiving website for organizi
 - Environment variables: `.env.local` (git-ignored), `.env.example` (tracked)
 
 ## Git Workflow
-- Never commit directly to `main`
-- Branch prefix: `dev/claude/...`
-- Commit format: `[prefix] type: description`
+
+Follows **GitLab Flow** with environment branches. See `docs/git-workflow.md` for full details.
+
+- Never commit directly to `main`, `staging`, or `production`
+- `staging` and `production` are protected environment branches — never delete them
+- Feature flow: `feature/...` → `main` → `staging` → `production` (upstream-first, no skipping)
+- Branch naming: `[type]/[short-description]` (e.g., `feature/add-login`, `fix/auth-bug`)
+- Commit format: `[prefix] type: description` (conventional commits)
 - All changes go through Pull Requests
-- Claude must NEVER merge PRs into `main` — the user handles merging via browser
+- Claude must NEVER merge PRs — the user handles merging via browser
 - Commits should be as granular and detailed as possible (one concern per commit)
 
 ## Security Rules
