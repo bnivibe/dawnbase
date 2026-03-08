@@ -1,7 +1,7 @@
 # ADR-002: Database - PostgreSQL via Supabase
 
 ## Status
-Accepted
+Accepted (Production only — local development uses local PostgreSQL)
 
 ## Date
 2026-03-07
@@ -59,4 +59,12 @@ The database choice affects schema design, query performance, scalability, and s
 - Network latency due to external service dependency
 - Direct application impact during Supabase service outages
 - Need to upgrade to a paid plan when free tier limits are exceeded ($25/month Pro plan)
-- Requires Supabase CLI or local PostgreSQL setup for local development environment
+
+## Development vs Production
+
+| Environment | Database | Notes |
+|-------------|----------|-------|
+| Local development | Local PostgreSQL | No external dependency, fast iteration |
+| Production | Supabase (PostgreSQL) | Hosted, Auth/Realtime/Storage included |
+
+Supabase will be configured when the project is first deployed to production. During development, a local PostgreSQL instance is used with the same schema.

@@ -31,20 +31,30 @@ Changes made:
 
 ### Negative / Requirements
 - `DATABASE_URL` environment variable must be configured in `.env.local` before the app can run
-- Supabase project must be created and the migration must be run (`drizzle-kit push` or `drizzle-kit migrate`) before first use
+- A PostgreSQL database must exist and the migration must be run (`drizzle-kit push` or `drizzle-kit migrate`) before first use
 
 ## Migration Prerequisite
 
-Before running the app, ensure `.env.local` contains a valid `DATABASE_URL`:
+### Local Development (PostgreSQL)
+
+Install and start PostgreSQL locally, create the database, then set `.env.local`:
 
 ```
-DATABASE_URL=postgresql://postgres:YOUR_DB_PASSWORD@db.YOUR_PROJECT_REF.supabase.co:5432/postgres
+DATABASE_URL=postgresql://<your-username>@localhost:5432/dawnbase_dev
 ```
 
 Then run the Drizzle migration to create the `articles` table:
 
 ```bash
 npx drizzle-kit push
+```
+
+### Production (Supabase — to be configured at deployment)
+
+When deploying to production, replace `DATABASE_URL` with the Supabase connection string:
+
+```
+DATABASE_URL=postgresql://postgres:YOUR_DB_PASSWORD@db.YOUR_PROJECT_REF.supabase.co:5432/postgres
 ```
 
 ## Alternatives Considered
