@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { Plus, FileText } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { FileText } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -54,10 +53,6 @@ export default async function ArticlesPage() {
             {pagination.total} article{pagination.total !== 1 ? "s" : ""}
           </p>
         </div>
-        <Button render={<Link href="/articles/new" />}>
-          <Plus className="size-4" />
-          New Article
-        </Button>
       </div>
 
       {/* Article list */}
@@ -67,12 +62,8 @@ export default async function ArticlesPage() {
             <FileText className="mb-4 size-12 text-muted-foreground/40" />
             <h2 className="text-lg font-medium">No articles yet</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Create your first article to get started!
+              Articles will appear here once they are added.
             </p>
-            <Button className="mt-4" render={<Link href="/articles/new" />}>
-              <Plus className="size-4" />
-              New Article
-            </Button>
           </CardContent>
         </Card>
       ) : (

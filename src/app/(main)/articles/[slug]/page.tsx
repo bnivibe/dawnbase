@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,7 +12,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { getArticleBySlug } from "@/lib/db/articles-repository";
-import { ArticleDeleteButton } from "./delete-button";
 
 function StatusBadge({ status }: { status: string }) {
   switch (status) {
@@ -83,6 +82,16 @@ export default async function ArticleDetailPage({
             {article.publishedAt && (
               <span>Published: {formatDate(article.publishedAt)}</span>
             )}
+            {article.sourceUrl && (
+              <a
+                href={article.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline"
+              >
+                Source ({article.sourceType ?? "link"})
+              </a>
+            )}
           </div>
 
           <Separator />
@@ -90,20 +99,6 @@ export default async function ArticleDetailPage({
           {/* Content */}
           <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed">
             {article.content}
-          </div>
-
-          <Separator />
-
-          {/* Actions */}
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              render={<Link href={`/articles/${article.slug}/edit`} />}
-            >
-              <Pencil className="size-4" />
-              Edit
-            </Button>
-            <ArticleDeleteButton articleId={article.id} />
           </div>
         </CardContent>
       </Card>
