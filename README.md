@@ -12,12 +12,13 @@ Dawnbase is a **read-only knowledge archive**. Articles are created and managed 
 
 | Category | Technology |
 |----------|-----------|
-| Framework | Next.js 15 (App Router, TypeScript, Turbopack) |
+| Framework | Next.js 16 (App Router, TypeScript, Turbopack) |
 | Styling | Tailwind CSS v4 + shadcn/ui |
 | Database | PostgreSQL via Supabase |
 | ORM | Drizzle ORM |
 | Validation | Zod |
-| Testing | Vitest |
+| Markdown | react-markdown + remark-gfm + @tailwindcss/typography |
+| Testing | Vitest (unit) + Playwright (E2E) |
 | Deployment | Vercel |
 
 ## Getting Started
@@ -42,12 +43,13 @@ npm install
 cp .env.example .env.local
 ```
 
-Edit `.env.local` with your Supabase credentials:
+Edit `.env.local` with your credentials:
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 DATABASE_URL=postgresql://postgres:YOUR_DB_PASSWORD@db.YOUR_PROJECT_REF.supabase.co:5432/postgres
+ADMIN_PASSWORD=your-admin-password
 ```
 
 ### Database Setup
@@ -59,9 +61,10 @@ npx drizzle-kit push
 ### Development
 
 ```bash
-npm run dev        # start dev server (Turbopack)
-npm test           # run unit tests
-npm run test:watch # run tests in watch mode
+npm run dev          # start dev server (Turbopack)
+npm test             # run unit tests
+npm run test:watch   # run tests in watch mode
+npm run test:e2e     # run Playwright E2E tests
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
@@ -85,8 +88,11 @@ dawnbase/
     flows/          # User flow specs
   src/
     app/            # Next.js App Router (pages, API routes)
+      admin/        # Admin pages (login)
+    actions/        # Server Actions (admin auth, publish)
     components/     # React components (ui, layout)
     lib/            # Business logic (db, validations, utils)
+    scripts/        # CLI scripts (content pipeline)
     types/          # TypeScript type definitions
 ```
 
