@@ -84,6 +84,16 @@ export default async function ArticleDetailPage({
             {article.publishedAt && (
               <span>Published: {formatDate(article.publishedAt)}</span>
             )}
+            {article.sourceUrl && (
+              <a
+                href={article.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline"
+              >
+                Source ({article.sourceType ?? "link"})
+              </a>
+            )}
           </div>
 
           <Separator />
