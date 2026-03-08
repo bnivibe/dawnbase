@@ -50,7 +50,8 @@ Follows **GitLab Flow** with environment branches. See `docs/git-workflow.md` fo
 - `staging` and `production` are protected environment branches — never delete them
 - Feature flow: `feature/...` → `main` → `staging` → `production` (upstream-first, no skipping)
 - Branch naming: `[type]/[short-description]` (e.g., `feature/add-login`, `fix/auth-bug`)
-- Commit format: `[prefix] type: description` (conventional commits)
+- Commit format: `[prefix] type: description` — `[bnivibe]` for user-requested, `[claude]` for auto
+- `[claude]` commits must include: `Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>`
 - All changes go through Pull Requests
 - Claude must NEVER merge PRs — the user handles merging via browser
 - Commits should be as granular and detailed as possible (one concern per commit)
