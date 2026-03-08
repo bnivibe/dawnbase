@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { FileText, PenLine, BookOpen, Plus } from "lucide-react";
+import { FileText, PenLine, BookOpen } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -61,24 +60,6 @@ export default async function DashboardPage() {
         </Card>
       </div>
 
-      {/* Get Started */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Get Started</CardTitle>
-          <CardDescription>
-            Start building your knowledge archive by creating your first article.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Link
-            href="/articles/new"
-            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
-          >
-            <Plus className="size-4" />
-            Create First Article
-          </Link>
-        </CardContent>
-      </Card>
     </div>
   );
 }

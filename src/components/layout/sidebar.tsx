@@ -9,7 +9,6 @@ import {
   FileText,
   FolderTree,
   Search,
-  Plus,
   PanelLeftClose,
   PanelLeft,
 } from "lucide-react";
@@ -150,31 +149,6 @@ export function Sidebar() {
 
       {/* Bottom section */}
       <div className="border-t p-2">
-        {/* New Article button */}
-        {collapsed ? (
-          <Tooltip>
-            <TooltipTrigger
-              render={<div />}
-            >
-              <Link
-                href="/articles/new"
-                className="flex items-center justify-center rounded-lg bg-primary px-3 py-2 text-primary-foreground transition-colors hover:bg-primary/80"
-              >
-                <Plus className="size-4" />
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">New Article</TooltipContent>
-          </Tooltip>
-        ) : (
-          <Link
-            href="/articles/new"
-            className="flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
-          >
-            <Plus className="size-4" />
-            New Article
-          </Link>
-        )}
-
         {/* Collapse toggle */}
         <Button
           variant="ghost"
@@ -242,16 +216,6 @@ export function MobileSidebarContent() {
         })}
       </nav>
 
-      {/* New Article */}
-      <div className="border-t p-2">
-        <Link
-          href="/articles/new"
-          className="flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
-        >
-          <Plus className="size-4" />
-          New Article
-        </Link>
-      </div>
     </div>
   );
 }
