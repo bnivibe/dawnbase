@@ -14,6 +14,12 @@ export const articleStatusEnum = pgEnum("article_status", [
   "archived",
 ]);
 
+export const sourceTypeEnum = pgEnum("source_type", [
+  "youtube",
+  "blog",
+  "manual",
+]);
+
 export const articles = pgTable(
   "articles",
   {
@@ -30,6 +36,8 @@ export const articles = pgTable(
       .notNull()
       .defaultNow(),
     publishedAt: timestamp("published_at", { withTimezone: true }),
+    sourceUrl: text("source_url"),
+    sourceType: sourceTypeEnum("source_type"),
   },
   (table) => [
     index("idx_articles_status").on(table.status),

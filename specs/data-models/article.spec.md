@@ -21,8 +21,18 @@ Article is the core data model of Dawnbase. It represents knowledge items (artic
 | `createdAt` | timestamp (string) | auto, ISO 8601 | `now()` | Creation timestamp |
 | `updatedAt` | timestamp (string) | auto, ISO 8601 | `now()` | Last modified timestamp |
 | `publishedAt` | timestamp (string) | nullable, ISO 8601 | `null` | Publication timestamp. Automatically set when status changes to published |
+| `sourceUrl` | text | nullable | `null` | Original source URL (YouTube, blog, etc.) |
+| `sourceType` | enum (SourceType) | nullable | `null` | Type of source content |
 
 ## Enum Definitions
+
+### SourceType
+
+| Value | Description |
+|-------|-------------|
+| `youtube` | YouTube video URL |
+| `blog` | Blog post or article URL |
+| `manual` | Manually written .md file |
 
 ### ArticleStatus
 

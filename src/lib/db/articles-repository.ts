@@ -28,6 +28,8 @@ interface CreateArticleInput {
   content: string;
   excerpt?: string;
   status?: ArticleStatus;
+  sourceUrl?: string;
+  sourceType?: "youtube" | "blog" | "manual";
 }
 
 interface UpdateArticleInput {
@@ -35,6 +37,8 @@ interface UpdateArticleInput {
   content?: string;
   excerpt?: string | null;
   status?: ArticleStatus;
+  sourceUrl?: string | null;
+  sourceType?: "youtube" | "blog" | "manual" | null;
 }
 
 export interface ArticleStats {
@@ -162,6 +166,8 @@ export async function createArticle(
       createdAt: now,
       updatedAt: now,
       publishedAt: status === "published" ? now : null,
+      sourceUrl: input.sourceUrl ?? null,
+      sourceType: input.sourceType ?? null,
     })
     .returning();
 
@@ -184,6 +190,8 @@ export async function updateArticle(
   if (input.content !== undefined) updateValues.content = input.content;
   if (input.excerpt !== undefined) updateValues.excerpt = input.excerpt;
   if (input.status !== undefined) updateValues.status = input.status;
+  if (input.sourceUrl !== undefined) updateValues.sourceUrl = input.sourceUrl;
+  if (input.sourceType !== undefined) updateValues.sourceType = input.sourceType;
 
   // Regenerate slug if title changed
   if (input.title && input.title !== existing.title) {

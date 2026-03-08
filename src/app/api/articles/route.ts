@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { CreateArticleSchema } from "@/lib/validations/article";
-import { getArticles, createArticle } from "@/lib/db/articles-repository";
+import { getArticles } from "@/lib/db/articles-repository";
 
 const ListArticlesQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
@@ -57,29 +56,3 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const parsed = CreateArticleSchema.safeParse(body);
-
-    if (!parsed.success) {
-      return NextResponse.json(
-        {
-          error: "Validation failed",
-          details: formatZodError(parsed.error),
-        },
-        { status: 400 },
-      );
-    }
-
-    const article = await createArticle(parsed.data);
-
-    return NextResponse.json({ data: article }, { status: 201 });
-  } catch (error) {
-    console.error("[POST /api/articles]", error);
-    return NextResponse.json(
-      { error: "Failed to create article" },
-      { status: 500 },
-    );
-  }
-}

@@ -14,12 +14,14 @@ Defines the CRUD API for the Article resource. Uses Next.js App Router Route Han
 | Method | Path | Description | Auth |
 |--------|------|-------------|------|
 | GET | `/api/articles` | List articles (pagination, filtering) | None (Phase 1) |
-| POST | `/api/articles` | Create a new article | None (Phase 1) |
+| ~~POST~~ | ~~`/api/articles`~~ | ~~Create a new article~~ | **REMOVED** — Claude-managed only |
 | GET | `/api/articles/[id]` | Get a single article | None (Phase 1) |
-| PUT | `/api/articles/[id]` | Update an article | None (Phase 1) |
-| DELETE | `/api/articles/[id]` | Soft delete an article (archived) | None (Phase 1) |
+| ~~PUT~~ | ~~`/api/articles/[id]`~~ | ~~Update an article~~ | **REMOVED** — Claude-managed only |
+| ~~DELETE~~ | ~~`/api/articles/[id]`~~ | ~~Soft delete an article (archived)~~ | **REMOVED** — Claude-managed only |
 
-> **Phase 4 Note**: When authentication (Auth) is added, all write endpoints (POST, PUT, DELETE) will require authentication.
+> **Phase 1.1 Note**: POST, PUT, and DELETE endpoints have been removed from the public web API. All write operations are performed directly by Claude via the repository layer (`createArticle`, `updateArticle`, `deleteArticle`). These repository functions remain in the codebase for Claude's direct use.
+
+> **Phase 4 Note**: When authentication (Auth) is added, read endpoints may require authentication.
 
 ## File Structure
 

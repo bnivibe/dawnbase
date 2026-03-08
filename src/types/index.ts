@@ -2,6 +2,7 @@
 export type {
   Article,
   ArticleStatus,
+  SourceType,
   CreateArticleInput,
   UpdateArticleInput,
 } from "@/lib/validations/article";
