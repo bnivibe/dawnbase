@@ -119,7 +119,7 @@ interface AppShellProps {
 
 ```typescript
 interface SidebarProps {
-  // Managed as internal state (collapsed/expanded)
+  isAdmin?: boolean; // passed from server layout, controls admin button visibility
 }
 ```
 
@@ -141,6 +141,16 @@ interface SidebarProps {
 
 - Phase 2 items are displayed in the navigation in Phase 1 but styled as disabled with `opacity-50 pointer-events-none`
 - The item corresponding to the current route is highlighted with `bg-accent` background + bold text
+
+**Bottom Section** (below nav, above collapse toggle):
+
+| State | Button | Icon | Action |
+|-------|--------|------|--------|
+| `isAdmin: false` | Admin | `LogIn` | Navigate to `/admin/login` |
+| `isAdmin: true` | Logout | `LogOut` | Submit `logoutAction` (form POST) |
+
+- In collapsed mode, only the icon is shown (no label)
+- `isAdmin` is determined server-side in the layout and passed as a prop
 
 **Recent Articles Quick Links**:
 - Displays up to 5 recently created/modified articles
