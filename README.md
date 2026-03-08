@@ -1,14 +1,18 @@
 # Dawnbase
 
-Dawn's Knowledge Archive — A personal knowledge archiving website for organizing things learned and scrapped.
+Dawn's Knowledge Archive — A personal knowledge archiving website for organizing things learned and collected.
 
-> **Status:** Phase 1 in progress — Article CRUD with database integration complete
+> **Status:** Phase 1.1 in progress — Read-only web UI with Claude-managed content pipeline
+
+## Overview
+
+Dawnbase is a **read-only knowledge archive**. Articles are created and managed by Claude directly via the database — not through the web UI. Dawn provides source material (YouTube links, blog posts, or `.md` files) and Claude processes, structures, and persists the content.
 
 ## Tech Stack
 
 | Category | Technology |
 |----------|-----------|
-| Framework | Next.js 16 (App Router, TypeScript, Turbopack) |
+| Framework | Next.js 15 (App Router, TypeScript, Turbopack) |
 | Styling | Tailwind CSS v4 + shadcn/ui |
 | Database | PostgreSQL via Supabase |
 | ORM | Drizzle ORM |
@@ -69,14 +73,19 @@ dawnbase/
   docs/
     plans/          # Plan history (what to build)
     decisions/      # ADR - Architecture Decision Records (why)
+    ideas.md        # Feature ideas and design thoughts
     git-workflow.md # Git workflow guide
-  specs/            # SDD specs (source of truth)
+  specs/
+    features/       # Phase-versioned feature checklists
+    data-models/    # Data model specs
+    api/            # API endpoint specs
+    ui/             # UI component specs
+    flows/          # User flow specs
   src/
     app/            # Next.js App Router (pages, API routes)
-    components/     # React components (ui, layout, articles)
+    components/     # React components (ui, layout)
     lib/            # Business logic (db, validations, utils)
     types/          # TypeScript type definitions
-    actions/        # Server Actions
 ```
 
 ## Development Methodology
@@ -87,6 +96,8 @@ This project follows **SDD (Spec-Driven Development)**:
 2. Implement based on specs
 3. Track decisions in `docs/decisions/` (ADR)
 4. Track plans in `docs/plans/`
+
+See [specs/README.md](./specs/README.md) for full SDD guide.
 
 ## Git Workflow
 
@@ -108,10 +119,10 @@ See [docs/git-workflow.md](./docs/git-workflow.md) for details.
 
 | Phase | Name | Description | Status |
 |-------|------|-------------|--------|
-| 1 | Foundation | Project setup + Article CRUD | In Progress |
-| 2 | Organization | Categories, Tags, Collections, Search | Planned |
-| 3 | Intelligence | AI auto-tagging, summarization, semantic search | Planned |
-| 4 | Social | Authentication, multi-user, sharing | Planned |
+| 1.1 | Foundation | Read-only web UI + Claude content pipeline | In Progress |
+| 2 | Organization & Search | Categories, tags, full-text search, filtering | Planned |
+| 3 | Rich Content | Markdown rendering, image/media support | Planned |
+| 4 | Auth & Deploy | Supabase Auth, permissions, production deployment | Planned |
 
 ## License
 
