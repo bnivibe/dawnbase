@@ -2,15 +2,18 @@
 
 Dawn's Knowledge Archive — A personal knowledge archiving website for organizing things learned and scrapped.
 
+> **Status:** Phase 1 in progress — Article CRUD with database integration complete
+
 ## Tech Stack
 
 | Category | Technology |
 |----------|-----------|
-| Framework | Next.js 15 (App Router, TypeScript) |
+| Framework | Next.js 16 (App Router, TypeScript, Turbopack) |
 | Styling | Tailwind CSS v4 + shadcn/ui |
 | Database | PostgreSQL via Supabase |
 | ORM | Drizzle ORM |
 | Validation | Zod |
+| Testing | Vitest |
 | Deployment | Vercel |
 
 ## Getting Started
@@ -43,10 +46,18 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 DATABASE_URL=postgresql://postgres:YOUR_DB_PASSWORD@db.YOUR_PROJECT_REF.supabase.co:5432/postgres
 ```
 
+### Database Setup
+
+```bash
+npx drizzle-kit push
+```
+
 ### Development
 
 ```bash
-npm run dev
+npm run dev        # start dev server (Turbopack)
+npm test           # run unit tests
+npm run test:watch # run tests in watch mode
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
@@ -58,12 +69,14 @@ dawnbase/
   docs/
     plans/          # Plan history (what to build)
     decisions/      # ADR - Architecture Decision Records (why)
+    git-workflow.md # Git workflow guide
   specs/            # SDD specs (source of truth)
   src/
     app/            # Next.js App Router (pages, API routes)
     components/     # React components (ui, layout, articles)
     lib/            # Business logic (db, validations, utils)
     types/          # TypeScript type definitions
+    actions/        # Server Actions
 ```
 
 ## Development Methodology
@@ -74,6 +87,22 @@ This project follows **SDD (Spec-Driven Development)**:
 2. Implement based on specs
 3. Track decisions in `docs/decisions/` (ADR)
 4. Track plans in `docs/plans/`
+
+## Git Workflow
+
+This project follows **GitLab Flow** with environment branches:
+
+```
+feature/... → main → staging → production
+```
+
+| Branch | Role |
+|--------|------|
+| `main` | Integration — all features land here |
+| `staging` | Staging gate |
+| `production` | Live traffic |
+
+See [docs/git-workflow.md](./docs/git-workflow.md) for details.
 
 ## Roadmap
 
