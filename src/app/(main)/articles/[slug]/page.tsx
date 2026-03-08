@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { ExternalLink } from "lucide-react";
 import { getArticleBySlug } from "@/lib/db/articles-repository";
 import { MarkdownContent } from "@/components/markdown-content";
 
@@ -83,22 +84,31 @@ export default async function ArticleDetailPage({
             {article.publishedAt && (
               <span>Published: {formatDate(article.publishedAt)}</span>
             )}
-            {article.sourceUrl && (
-              <a
-                href={article.sourceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline"
-              >
-                Source ({article.sourceType ?? "link"})
-              </a>
-            )}
           </div>
 
           <Separator />
 
           {/* Content */}
           <MarkdownContent content={article.content} />
+
+          {/* Source */}
+          {article.sourceUrl && (
+            <>
+              <Separator />
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">출처</span>
+                <a
+                  href={article.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 hover:text-foreground hover:underline"
+                >
+                  {article.sourceUrl}
+                  <ExternalLink className="size-3" />
+                </a>
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
     </div>
