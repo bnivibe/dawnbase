@@ -1,8 +1,10 @@
 # User Flow: Article Creation
 
+> **ARCHIVED**: This flow is superseded by the Claude Content Pipeline. See specs/flows/claude-content-pipeline.flow.md
+
 > **Phase**: Phase 1
-> **Status**: Implementing
-> **Last Updated**: 2026-03-07
+> **Status**: Archived
+> **Last Updated**: 2026-03-08
 
 ## Overview
 
