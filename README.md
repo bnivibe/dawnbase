@@ -73,6 +73,7 @@ dawnbase/
   docs/
     plans/          # Plan history (what to build)
     decisions/      # ADR - Architecture Decision Records (why)
+    guardrails/     # Incident records for unintended Claude behaviors
     ideas.md        # Feature ideas and design thoughts
     git-workflow.md # Git workflow guide
   specs/
