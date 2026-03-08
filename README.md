@@ -106,6 +106,7 @@ Claude then structures, stores, and confirms the result.
 | Document | Description |
 |----------|-------------|
 | [docs/guides/post-article.md](./docs/guides/post-article.md) | How to post an article (usage guide) |
+| [docs/guides/admin.md](./docs/guides/admin.md) | Admin login and content management guide |
 | [specs/flows/claude-content-pipeline.flow.md](./specs/flows/claude-content-pipeline.flow.md) | Pipeline flow spec |
 | [docs/decisions/012-claude-managed-content-pipeline.md](./docs/decisions/012-claude-managed-content-pipeline.md) | Why this approach was chosen (ADR-012) |
 
