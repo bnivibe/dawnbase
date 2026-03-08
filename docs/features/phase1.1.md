@@ -5,7 +5,7 @@
 Dawnbase is Dawn's personal knowledge archive. The web interface is **read-only** — visitors browse and read articles. All content creation and management is handled by Claude directly via the database.
 
 **Phase:** 1.1
-**Last Updated:** 2026-03-08
+**Last Updated:** 2026-03-08 (revised post-implementation)
 
 ---
 
@@ -37,11 +37,12 @@ Dawnbase is Dawn's personal knowledge archive. The web interface is **read-only*
 - [x] Title — displays article title as heading
 - [x] Status badge — current status (Published / Draft / Archived)
 - [x] Meta info — displays created date, updated date, and published date
-- [x] Source link — displays external link with source_type when source_url exists
-- [x] Body — displays article content (plain text, whitespace-pre-wrap)
+- [x] Source link — displays external link with source_type in meta info row when source_url exists
+- [x] Source section — full URL with ExternalLink icon at bottom of article when source_url exists
+- [x] Body — renders Markdown (react-markdown + remark-gfm + @tailwindcss/typography)
 - [x] Back button — navigates to `/articles` list
 - [x] 404 handling — shows not-found page when slug does not exist
-- [ ] Markdown rendering — currently plain text, planned for Phase 3
+- [x] Publish toggle — Publish / Unpublish button shown next to status badge when admin is authenticated
 
 ---
 
@@ -58,6 +59,8 @@ Dawnbase is Dawn's personal knowledge archive. The web interface is **read-only*
 - [x] Collapsed tooltip — shows label tooltip on icon hover
 - [x] State persistence — saves collapsed state to `localStorage`
 - [x] Remove "New Article" button — remove sidebar bottom button (desktop + mobile)
+- [x] Admin link — "Admin" button (LogIn icon) at bottom when unauthenticated → navigates to `/admin/login`
+- [x] Logout button — "Logout" button (LogOut icon) at bottom when authenticated → clears session
 
 ---
 
@@ -96,12 +99,22 @@ Dawnbase is Dawn's personal knowledge archive. The web interface is **read-only*
 
 ---
 
+## Admin (Phase 1.1 — Temporary)
+
+- [x] `/admin/login` — password entry form, issues session cookie on success
+- [x] Session cookie — httpOnly, sameSite=strict, 7-day TTL, sha256(ADMIN_PASSWORD)
+- [x] Server Actions — `loginAction`, `logoutAction`, `publishArticleAction`, `unpublishArticleAction`
+
+> This is a minimal pre-auth solution. Will be replaced by Supabase Auth in Phase 4.
+> See [ADR-015](../decisions/015-browser-admin-publish.md) for full rationale.
+
+---
+
 ## Out of Scope (Phase 2+)
 
 | Feature | Planned Phase |
 |---------|--------------|
 | Search | Phase 2 |
 | Category / Tag Filter | Phase 2 |
-| Markdown Rendering | Phase 3 |
 | Image / Media Display | Phase 3 |
-| User Authentication | Phase 4 |
+| Full Auth (Supabase) | Phase 4 |
