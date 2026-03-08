@@ -19,3 +19,4 @@ A list of Architecture Decision Records (ADRs) documenting the project's key tec
 | [013](./013-guardrails-for-claude-behavior.md) | Introduce Guardrails Documentation for Claude Behavior | Accepted | 2026-03-08 |
 | [014](./014-e2e-testing-playwright.md) | E2E Testing with Playwright | Accepted | 2026-03-08 |
 | [015](./015-browser-admin-publish.md) | Browser Admin Publish Before Phase 4 Auth | Accepted | 2026-03-08 |
+| [016](./016-notebooklm-analysis-layer.md) | Use NotebookLM as the Analysis Layer for URL Content | Planned | 2026-03-08 |
