@@ -12,6 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { getArticleBySlug } from "@/lib/db/articles-repository";
+import { MarkdownContent } from "@/components/markdown-content";
 
 function StatusBadge({ status }: { status: string }) {
   switch (status) {
@@ -97,9 +98,7 @@ export default async function ArticleDetailPage({
           <Separator />
 
           {/* Content */}
-          <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed">
-            {article.content}
-          </div>
+          <MarkdownContent content={article.content} />
         </CardContent>
       </Card>
     </div>
