@@ -2,7 +2,7 @@
 
 Dawn's Knowledge Archive — A personal knowledge archiving website for organizing things learned and collected.
 
-> **Status:** Phase 1.1 in progress — Read-only web UI with Claude-managed content pipeline
+> **Status:** Phase 1.1 complete — Read-only web UI with Claude-managed content pipeline
 
 ## Overview
 
@@ -71,6 +71,7 @@ Open [http://localhost:3000](http://localhost:3000)
 ```
 dawnbase/
   docs/
+    guides/         # How-to guides (content pipeline, workflows)
     plans/          # Plan history (what to build)
     decisions/      # ADR - Architecture Decision Records (why)
     guardrails/     # Incident records for unintended Claude behaviors
@@ -88,6 +89,27 @@ dawnbase/
     lib/            # Business logic (db, validations, utils)
     types/          # TypeScript type definitions
 ```
+
+## Content Pipeline
+
+Articles are not written through the web UI — they are created by Claude via the **content pipeline**:
+
+```
+You provide one of:
+  ├── YouTube URL        → Claude fetches and summarizes the video
+  ├── Blog / Article URL → Claude fetches and parses the content
+  └── .md summary file   → Claude reads and structures your notes
+
+Claude then structures, stores, and confirms the result.
+```
+
+| Document | Description |
+|----------|-------------|
+| [docs/guides/post-article.md](./docs/guides/post-article.md) | How to post an article (usage guide) |
+| [specs/flows/claude-content-pipeline.flow.md](./specs/flows/claude-content-pipeline.flow.md) | Pipeline flow spec |
+| [docs/decisions/012-claude-managed-content-pipeline.md](./docs/decisions/012-claude-managed-content-pipeline.md) | Why this approach was chosen (ADR-012) |
+
+---
 
 ## Development Methodology
 
@@ -120,9 +142,9 @@ See [docs/git-workflow.md](./docs/git-workflow.md) for details.
 
 | Phase | Name | Description | Status |
 |-------|------|-------------|--------|
-| 1.1 | Foundation | Read-only web UI + Claude content pipeline | In Progress |
+| 1.1 | Foundation | Read-only web UI + Claude content pipeline + Markdown rendering | ✅ Completed |
 | 2 | Organization & Search | Categories, tags, full-text search, filtering | Planned |
-| 3 | Rich Content | Markdown rendering, image/media support | Planned |
+| 3 | Rich Content | Image/media support, rich embeds | Planned |
 | 4 | Auth & Deploy | Supabase Auth, permissions, production deployment | Planned |
 
 ## License
