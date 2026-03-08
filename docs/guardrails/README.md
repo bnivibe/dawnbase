@@ -16,3 +16,4 @@ Each file represents one incident. When a new unintended behavior is discovered,
 | # | Title | Date |
 |---|-------|------|
 | [001](./001-merged-branch-commit.md) | Committing to an Already-Merged Branch | 2026-03-08 |
+| [002](./002-push-skipped-before-pr-reference.md) | Referencing a PR Without Actually Pushing | 2026-03-08 |
