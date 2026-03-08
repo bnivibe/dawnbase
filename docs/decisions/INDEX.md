@@ -14,3 +14,4 @@ A list of Architecture Decision Records (ADRs) documenting the project's key tec
 | [008](./008-deployment-vercel.md) | Deployment: Vercel | Accepted | 2026-03-07 |
 | [009](./009-security-hardening.md) | Security Hardening for Public Repository | Accepted | 2026-03-07 |
 | [010](./010-database-integration.md) | Replace Mock Repository with Drizzle ORM | Accepted | 2026-03-07 |
+| [011](./011-gitlab-flow.md) | Adopt GitLab Flow (Environment Branches) | Accepted | 2026-03-08 |
