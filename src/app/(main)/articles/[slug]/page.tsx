@@ -14,6 +14,8 @@ import { Separator } from "@/components/ui/separator";
 import { ExternalLink } from "lucide-react";
 import { getArticleBySlug } from "@/lib/db/articles-repository";
 import { MarkdownContent } from "@/components/markdown-content";
+import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { PublishToggle } from "@/components/publish-toggle";
 
 function StatusBadge({ status }: { status: string }) {
   switch (status) {
@@ -52,7 +54,10 @@ export default async function ArticleDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = await getArticleBySlug(decodeURIComponent(slug));
+  const [article, isAdmin] = await Promise.all([
+    getArticleBySlug(decodeURIComponent(slug)),
+    isAdminAuthenticated(),
+  ]);
 
   if (!article) {
     notFound();
@@ -74,6 +79,9 @@ export default async function ArticleDetailPage({
           <CardTitle className="text-xl">{article.title}</CardTitle>
           <CardAction className="flex items-center gap-2">
             <StatusBadge status={article.status} />
+            {isAdmin && (
+              <PublishToggle articleId={article.id} status={article.status} />
+            )}
           </CardAction>
         </CardHeader>
         <CardContent className="space-y-4">

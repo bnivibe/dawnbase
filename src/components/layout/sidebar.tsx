@@ -11,9 +11,12 @@ import {
   Search,
   PanelLeftClose,
   PanelLeft,
+  LogIn,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { logoutAction } from "@/actions/admin";
 import {
   Tooltip,
   TooltipTrigger,
@@ -65,7 +68,7 @@ function setCollapsed(value: boolean) {
   window.dispatchEvent(new Event(COLLAPSED_KEY));
 }
 
-export function Sidebar() {
+export function Sidebar({ isAdmin }: { isAdmin?: boolean }) {
   const pathname = usePathname();
   const collapsed = useCollapsed();
 
@@ -148,13 +151,38 @@ export function Sidebar() {
       </nav>
 
       {/* Bottom section */}
-      <div className="border-t p-2">
+      <div className="border-t p-2 space-y-1">
+        {/* Admin login / logout */}
+        {isAdmin ? (
+          <form action={logoutAction}>
+            <Button
+              type="submit"
+              variant="ghost"
+              size={collapsed ? "icon" : "default"}
+              className={cn("w-full", collapsed ? "" : "justify-start gap-2")}
+            >
+              <LogOut className="size-4 shrink-0" />
+              {!collapsed && <span>Logout</span>}
+            </Button>
+          </form>
+        ) : (
+          <Button
+            variant="ghost"
+            size={collapsed ? "icon" : "default"}
+            className={cn("w-full", collapsed ? "" : "justify-start gap-2")}
+            render={<Link href="/admin/login" />}
+          >
+            <LogIn className="size-4 shrink-0" />
+            {!collapsed && <span>Admin</span>}
+          </Button>
+        )}
+
         {/* Collapse toggle */}
         <Button
           variant="ghost"
           size={collapsed ? "icon" : "default"}
           onClick={toggleCollapsed}
-          className={cn("mt-1 w-full", collapsed ? "" : "justify-start gap-2")}
+          className={cn("w-full", collapsed ? "" : "justify-start gap-2")}
         >
           {collapsed ? (
             <PanelLeft className="size-4" />
