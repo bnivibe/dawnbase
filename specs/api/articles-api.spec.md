@@ -81,6 +81,8 @@ const ListArticlesQuerySchema = z.object({
       "content": "# Next.js App Router\n\n...",
       "excerpt": "The App Router introduced in Next.js 13...",
       "status": "published",
+      "sourceUrl": "https://nextjs.org/docs/app",
+      "sourceType": "blog",
       "createdAt": "2026-03-01T09:00:00.000Z",
       "updatedAt": "2026-03-05T14:30:00.000Z",
       "publishedAt": "2026-03-05T14:30:00.000Z"
@@ -238,6 +240,8 @@ Retrieves a single article by ID. Articles with `archived` status can also be re
     "content": "# Next.js App Router\n\n...",
     "excerpt": "The App Router introduced in Next.js 13...",
     "status": "published",
+    "sourceUrl": "https://nextjs.org/docs/app",
+    "sourceType": "blog",
     "createdAt": "2026-03-01T09:00:00.000Z",
     "updatedAt": "2026-03-05T14:30:00.000Z",
     "publishedAt": "2026-03-05T14:30:00.000Z"
@@ -578,3 +582,4 @@ export async function DELETE(
 | Date | Change | Reason |
 |------|--------|--------|
 | 2026-03-07 | Initial creation | Phase 1 Article CRUD API spec |
+| 2026-03-10 | Added sourceUrl, sourceType to GET response examples | Sync with Article data model spec |

@@ -64,9 +64,12 @@ Article is the core data model of Dawnbase. It represents knowledge items (artic
 ```typescript
 import { z } from 'zod';
 
-// Enum
+// Enums
 export const ArticleStatusEnum = z.enum(['draft', 'published', 'archived']);
 export type ArticleStatus = z.infer<typeof ArticleStatusEnum>;
+
+export const SourceTypeEnum = z.enum(['youtube', 'blog', 'manual']);
+export type SourceType = z.infer<typeof SourceTypeEnum>;
 
 // Creation input schema
 export const CreateArticleSchema = z.object({
@@ -82,6 +85,8 @@ export const CreateArticleSchema = z.object({
     .max(300, 'Excerpt must be 300 characters or less')
     .optional(),
   status: ArticleStatusEnum.default('draft'),
+  sourceUrl: z.string().url().nullable().optional(),
+  sourceType: SourceTypeEnum.nullable().optional(),
 });
 
 export type CreateArticleInput = z.infer<typeof CreateArticleSchema>;
@@ -103,6 +108,8 @@ export const UpdateArticleSchema = z.object({
     .nullable()
     .optional(),
   status: ArticleStatusEnum.optional(),
+  sourceUrl: z.string().url().nullable().optional(),
+  sourceType: SourceTypeEnum.nullable().optional(),
 });
 
 export type UpdateArticleInput = z.infer<typeof UpdateArticleSchema>;
@@ -115,6 +122,8 @@ export const ArticleSchema = z.object({
   content: z.string(),
   excerpt: z.string().nullable(),
   status: ArticleStatusEnum,
+  sourceUrl: z.string().nullable(),
+  sourceType: SourceTypeEnum.nullable(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
   publishedAt: z.string().datetime().nullable(),
@@ -126,11 +135,10 @@ export type Article = z.infer<typeof ArticleSchema>;
 ## Drizzle ORM Schema
 
 ```typescript
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
-import { sql } from 'drizzle-orm';
+import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
-export const articles = sqliteTable('articles', {
-  id: text('id')
+export const articles = pgTable('articles', {
+  id: uuid('id')
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   title: text('title').notNull(),
@@ -140,13 +148,15 @@ export const articles = sqliteTable('articles', {
   status: text('status', { enum: ['draft', 'published', 'archived'] })
     .notNull()
     .default('draft'),
-  createdAt: text('created_at')
+  sourceUrl: text('source_url'),
+  sourceType: text('source_type', { enum: ['youtube', 'blog', 'manual'] }),
+  createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
-    .default(sql`(datetime('now'))`),
-  updatedAt: text('updated_at')
+    .defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
-    .default(sql`(datetime('now'))`),
-  publishedAt: text('published_at'),
+    .defaultNow(),
+  publishedAt: timestamp('published_at', { withTimezone: true }),
 });
 ```
 
@@ -206,6 +216,8 @@ function generateExcerpt(content: string, maxLength: number = 300): string {
     "content": "# Next.js App Router\n\nThe App Router introduced in Next.js 13...\n\n## Key Features\n\n- **Server Components**: All components are server components by default\n- **Layouts**: Nested layout support\n- **Routing**: File-system based routing\n\n## Getting Started\n\n```bash\nnpx create-next-app@latest\n```",
     "excerpt": "The App Router introduced in Next.js 13 provides key features such as server components, nested layouts, and file-system based routing.",
     "status": "published",
+    "sourceUrl": "https://nextjs.org/docs/app",
+    "sourceType": "blog",
     "createdAt": "2026-03-01T09:00:00.000Z",
     "updatedAt": "2026-03-05T14:30:00.000Z",
     "publishedAt": "2026-03-05T14:30:00.000Z"
@@ -217,6 +229,8 @@ function generateExcerpt(content: string, maxLength: number = 300): string {
     "content": "# TypeScript Utility Types\n\nA summary of frequently used utility types.\n\n## Partial<T>\n\nMakes all properties optional.\n\n```typescript\ninterface User {\n  name: string;\n  age: number;\n}\n\ntype PartialUser = Partial<User>;\n// { name?: string; age?: number; }\n```",
     "excerpt": "A summary of frequently used TypeScript utility types (Partial, Required, Pick, Omit, etc.).",
     "status": "draft",
+    "sourceUrl": null,
+    "sourceType": "manual",
     "createdAt": "2026-03-07T10:00:00.000Z",
     "updatedAt": "2026-03-07T10:00:00.000Z",
     "publishedAt": null
@@ -228,6 +242,8 @@ function generateExcerpt(content: string, maxLength: number = 300): string {
     "content": "# This article has been archived.",
     "excerpt": "This is an archived article.",
     "status": "archived",
+    "sourceUrl": null,
+    "sourceType": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
     "updatedAt": "2026-02-20T16:00:00.000Z",
     "publishedAt": "2026-01-16T10:00:00.000Z"
@@ -252,3 +268,5 @@ function generateExcerpt(content: string, maxLength: number = 300): string {
 | Date | Change | Reason |
 |------|--------|--------|
 | 2026-03-07 | Initial creation | Phase 1 core data model spec |
+| 2026-03-10 | Drizzle schema: SQLite → PostgreSQL (pgTable, uuid, timestamp) | DB stack changed to PostgreSQL via Supabase |
+| 2026-03-10 | Added sourceUrl, sourceType to Drizzle schema, Zod schemas, and example data | Fields were defined in Field Definitions but missing from code specs |
