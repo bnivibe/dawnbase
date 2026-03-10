@@ -37,7 +37,9 @@ specs/
   api/                         # API endpoint specs
     articles-api.spec.md       # Phase 1: Article CRUD API
   flows/                       # User flow specs
-    create-article.flow.md     # Phase 1: Article creation flow
+    admin-login.flow.md        # Phase 1: Admin login/logout flow
+    create-article.flow.md     # Phase 1: Article creation flow (Archived — replaced by Claude pipeline)
+    claude-content-pipeline.flow.md  # Phase 1: Claude content pipeline flow
 ```
 
 ## Spec Document Conventions
@@ -96,5 +98,5 @@ Dawnbase project tech stack:
 - **Language**: TypeScript 5
 - **UI**: React 19, Tailwind CSS 4
 - **Validation**: Zod
-- **Database**: SQLite (via Drizzle ORM) - Phase 1
+- **Database**: PostgreSQL via Supabase (Drizzle ORM)
 - **Theme**: next-themes (dark/light mode)
