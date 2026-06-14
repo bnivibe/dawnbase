@@ -1,5 +1,17 @@
 import type { Article } from "@/lib/validations/article";
 
+// Default knowledge-metadata / legacy-source fields for seed data (ADR-017).
+// Spread into each mock article so the objects satisfy the full Article type.
+const defaultMeta = {
+  sourceUrl: null,
+  sourceType: null,
+  verified: "unverified" as const,
+  verifiedAt: null,
+  sources: null,
+  relatedSlugs: null,
+  reviewDueAt: null,
+};
+
 export const mockArticles: Article[] = [
   {
     id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
@@ -13,6 +25,7 @@ export const mockArticles: Article[] = [
     createdAt: new Date("2026-03-01T09:00:00Z"),
     updatedAt: new Date("2026-03-01T09:00:00Z"),
     publishedAt: new Date("2026-03-01T09:00:00Z"),
+    ...defaultMeta,
   },
   {
     id: "b2c3d4e5-f6a7-8901-bcde-f12345678901",
@@ -26,6 +39,7 @@ export const mockArticles: Article[] = [
     createdAt: new Date("2026-03-03T14:00:00Z"),
     updatedAt: new Date("2026-03-05T10:30:00Z"),
     publishedAt: new Date("2026-03-05T10:30:00Z"),
+    ...defaultMeta,
   },
   {
     id: "c3d4e5f6-a7b8-9012-cdef-123456789012",
@@ -39,9 +53,10 @@ export const mockArticles: Article[] = [
     createdAt: new Date("2026-03-06T08:00:00Z"),
     updatedAt: new Date("2026-03-06T08:00:00Z"),
     publishedAt: null,
+    ...defaultMeta,
   },
   {
-    id: "d4e5f6a7-b8c9-0123-defg-456789012345",
+    id: "d4e5f6a7-b8c9-0123-defa-456789012345",
     title: "Zod Validation Patterns",
     slug: "zod-validation-patterns",
     content:
@@ -52,5 +67,6 @@ export const mockArticles: Article[] = [
     createdAt: new Date("2026-03-07T06:00:00Z"),
     updatedAt: new Date("2026-03-07T06:00:00Z"),
     publishedAt: null,
+    ...defaultMeta,
   },
 ];
