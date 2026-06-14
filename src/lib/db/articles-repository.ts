@@ -1,7 +1,12 @@
 import { eq, ne, and, asc, desc, count } from "drizzle-orm";
 import { db } from "./index";
 import { articles } from "./schema/articles";
-import type { Article, ArticleStatus } from "@/lib/validations/article";
+import type {
+  Article,
+  ArticleSource,
+  ArticleStatus,
+  VerifiedState,
+} from "@/lib/validations/article";
 import { generateSlug } from "@/lib/utils/slug";
 import { generateExcerpt } from "@/lib/utils/excerpt";
 
@@ -30,6 +35,12 @@ interface CreateArticleInput {
   status?: ArticleStatus;
   sourceUrl?: string;
   sourceType?: "youtube" | "blog" | "manual";
+  // Knowledge-metadata (ADR-017)
+  verified?: VerifiedState;
+  verifiedAt?: Date | null;
+  sources?: ArticleSource[];
+  relatedSlugs?: string[];
+  reviewDueAt?: Date | null;
 }
 
 interface UpdateArticleInput {
@@ -39,6 +50,12 @@ interface UpdateArticleInput {
   status?: ArticleStatus;
   sourceUrl?: string | null;
   sourceType?: "youtube" | "blog" | "manual" | null;
+  // Knowledge-metadata (ADR-017)
+  verified?: VerifiedState;
+  verifiedAt?: Date | null;
+  sources?: ArticleSource[] | null;
+  relatedSlugs?: string[] | null;
+  reviewDueAt?: Date | null;
 }
 
 export interface ArticleStats {
@@ -168,6 +185,11 @@ export async function createArticle(
       publishedAt: status === "published" ? now : null,
       sourceUrl: input.sourceUrl ?? null,
       sourceType: input.sourceType ?? null,
+      verified: input.verified ?? "unverified",
+      verifiedAt: input.verifiedAt ?? null,
+      sources: input.sources ?? null,
+      relatedSlugs: input.relatedSlugs ?? null,
+      reviewDueAt: input.reviewDueAt ?? null,
     })
     .returning();
 
@@ -192,6 +214,13 @@ export async function updateArticle(
   if (input.status !== undefined) updateValues.status = input.status;
   if (input.sourceUrl !== undefined) updateValues.sourceUrl = input.sourceUrl;
   if (input.sourceType !== undefined) updateValues.sourceType = input.sourceType;
+  if (input.verified !== undefined) updateValues.verified = input.verified;
+  if (input.verifiedAt !== undefined) updateValues.verifiedAt = input.verifiedAt;
+  if (input.sources !== undefined) updateValues.sources = input.sources;
+  if (input.relatedSlugs !== undefined)
+    updateValues.relatedSlugs = input.relatedSlugs;
+  if (input.reviewDueAt !== undefined)
+    updateValues.reviewDueAt = input.reviewDueAt;
 
   // Regenerate slug if title changed
   if (input.title && input.title !== existing.title) {

@@ -3,6 +3,8 @@ export type {
   Article,
   ArticleStatus,
   SourceType,
+  ArticleSource,
+  VerifiedState,
   CreateArticleInput,
   UpdateArticleInput,
 } from "@/lib/validations/article";

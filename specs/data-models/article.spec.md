@@ -2,7 +2,7 @@
 
 > **Phase**: Phase 1
 > **Status**: Implementing
-> **Last Updated**: 2026-03-07
+> **Last Updated**: 2026-06-14
 
 ## Overview
 
@@ -21,8 +21,13 @@ Article is the core data model of Dawnbase. It represents knowledge items (artic
 | `createdAt` | timestamp (string) | auto, ISO 8601 | `now()` | Creation timestamp |
 | `updatedAt` | timestamp (string) | auto, ISO 8601 | `now()` | Last modified timestamp |
 | `publishedAt` | timestamp (string) | nullable, ISO 8601 | `null` | Publication timestamp. Automatically set when status changes to published |
-| `sourceUrl` | text | nullable | `null` | Original source URL (YouTube, blog, etc.) |
-| `sourceType` | enum (SourceType) | nullable | `null` | Type of source content |
+| `sourceUrl` | text | nullable | `null` | Original source URL (YouTube, blog, etc.). **Legacy single-source field**, superseded by `sources` (kept for backward compatibility) |
+| `sourceType` | enum (SourceType) | nullable | `null` | Type of source content. **Legacy**, superseded by `sources` |
+| `verified` | enum (VerifiedState) | required | `'unverified'` | Trust/freshness state of the article's factual claims (ADR-017) |
+| `verifiedAt` | timestamp | nullable | `null` | When the article's claims were last verified |
+| `sources` | jsonb (ArticleSource[]) | nullable | `null` | Multiple cited sources. Supersedes `sourceUrl`/`sourceType`; read via the `resolveSources()` adapter |
+| `relatedSlugs` | text[] | nullable | `null` | Soft links to related article slugs (no FK — ADR-017 / Dooray #25 "통합≠병합" principle) |
+| `reviewDueAt` | timestamp | nullable | `null` | When the article is due for a freshness re-check (powers the stale sweep) |
 
 ## Enum Definitions
 
@@ -42,6 +47,23 @@ Article is the core data model of Dawnbase. It represents knowledge items (artic
 | `published` | Published. A completed article |
 | `archived` | Archived. Soft-deleted state. Hidden from the default list |
 
+### VerifiedState (ADR-017)
+
+| Value | Description |
+|-------|-------------|
+| `verified` | The article's factual claims were checked and match their sources/code |
+| `partial` | Partially verified — some claims confirmed, others pending |
+| `unverified` | Never verified (default for new articles) |
+| `stale` | Previously verified but now past `reviewDueAt` — due for a re-check |
+
+### ArticleSource (jsonb element shape)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `url` | string (url) | Source URL |
+| `title` | string | Human-readable source title |
+| `type` | enum (SourceType) | `youtube` / `blog` / `manual` |
+
 ## Relationships
 
 | Relation | Target Model | Type | FK | Description |
@@ -58,6 +80,8 @@ Article is the core data model of Dawnbase. It represents knowledge items (artic
 | `idx_articles_status` | `status` | INDEX | Status-based filtering performance |
 | `idx_articles_created_at` | `createdAt` | INDEX | Chronological sorting performance |
 | `idx_articles_published_at` | `publishedAt` | INDEX | Publication date sorting performance |
+| `idx_articles_verified` | `verified` | INDEX | Trust-state filtering (badge, RAG ranking) |
+| `idx_articles_review_due_at` | `reviewDueAt` | INDEX | Stale-sweep lookup (freshness re-check) |
 
 ## Zod Schema
 
@@ -134,30 +158,45 @@ export type Article = z.infer<typeof ArticleSchema>;
 
 ## Drizzle ORM Schema
 
+> Canonical schema: `src/lib/db/schema/articles.ts`. Below reflects the knowledge-metadata layer (ADR-017).
+
 ```typescript
-import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import {
+  index, jsonb, pgEnum, pgTable, text, timestamp, uuid, varchar,
+} from 'drizzle-orm/pg-core';
+
+export const articleStatusEnum = pgEnum('article_status', ['draft', 'published', 'archived']);
+export const sourceTypeEnum = pgEnum('source_type', ['youtube', 'blog', 'manual']);
+export const verifiedStateEnum = pgEnum('verified_state', ['verified', 'partial', 'unverified', 'stale']);
+
+export type ArticleSource = { url: string; title: string; type: 'youtube' | 'blog' | 'manual' };
 
 export const articles = pgTable('articles', {
-  id: uuid('id')
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  title: text('title').notNull(),
-  slug: text('slug').notNull().unique(),
+  id: uuid('id').primaryKey().defaultRandom(),
+  title: varchar('title', { length: 200 }).notNull(),
+  slug: varchar('slug', { length: 300 }).notNull().unique(),
   content: text('content').notNull(),
-  excerpt: text('excerpt'),
-  status: text('status', { enum: ['draft', 'published', 'archived'] })
-    .notNull()
-    .default('draft'),
-  sourceUrl: text('source_url'),
-  sourceType: text('source_type', { enum: ['youtube', 'blog', 'manual'] }),
-  createdAt: timestamp('created_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
+  excerpt: varchar('excerpt', { length: 300 }),
+  status: articleStatusEnum('status').notNull().default('draft'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   publishedAt: timestamp('published_at', { withTimezone: true }),
-});
+  // Legacy single-source (backward compatibility)
+  sourceUrl: text('source_url'),
+  sourceType: sourceTypeEnum('source_type'),
+  // Knowledge-metadata (ADR-017)
+  verified: verifiedStateEnum('verified').notNull().default('unverified'),
+  verifiedAt: timestamp('verified_at', { withTimezone: true }),
+  sources: jsonb('sources').$type<ArticleSource[]>(),
+  relatedSlugs: text('related_slugs').array(),
+  reviewDueAt: timestamp('review_due_at', { withTimezone: true }),
+}, (table) => [
+  index('idx_articles_status').on(table.status),
+  index('idx_articles_created_at').on(table.createdAt),
+  index('idx_articles_published_at').on(table.publishedAt),
+  index('idx_articles_verified').on(table.verified),
+  index('idx_articles_review_due_at').on(table.reviewDueAt),
+]);
 ```
 
 ## Slug Generation Rules
@@ -268,5 +307,6 @@ function generateExcerpt(content: string, maxLength: number = 300): string {
 | Date | Change | Reason |
 |------|--------|--------|
 | 2026-03-07 | Initial creation | Phase 1 core data model spec |
+| 2026-06-14 | Add knowledge-metadata layer (`verified`, `verifiedAt`, `sources[]`, `relatedSlugs`, `reviewDueAt`) + `VerifiedState`/`ArticleSource`; mark `sourceUrl`/`sourceType` legacy; fix stale Drizzle block (SQLite → PostgreSQL) | ADR-017: trust/freshness layer for the knowledge archive (derived from Dooray #29 verify, #46 RAG) |
 | 2026-03-10 | Drizzle schema: SQLite → PostgreSQL (pgTable, uuid, timestamp) | DB stack changed to PostgreSQL via Supabase |
 | 2026-03-10 | Added sourceUrl, sourceType to Drizzle schema, Zod schemas, and example data | Fields were defined in Field Definitions but missing from code specs |
