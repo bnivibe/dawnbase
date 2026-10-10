@@ -26,7 +26,7 @@ Article is the core data model of Dawnbase. It represents knowledge items (artic
 | `verified` | enum (VerifiedState) | required | `'unverified'` | Trust/freshness state of the article's factual claims (ADR-017) |
 | `verifiedAt` | timestamp | nullable | `null` | When the article's claims were last verified |
 | `sources` | jsonb (ArticleSource[]) | nullable | `null` | Multiple cited sources. Supersedes `sourceUrl`/`sourceType`; read via the `resolveSources()` adapter |
-| `relatedSlugs` | text[] | nullable | `null` | Soft links to related article slugs (no FK — ADR-017 / Dooray #25 "통합≠병합" principle) |
+| `relatedSlugs` | text[] | nullable | `null` | Soft links to related article slugs (no FK; ADR-017, "integrate, don't merge") |
 | `reviewDueAt` | timestamp | nullable | `null` | When the article is due for a freshness re-check (powers the stale sweep) |
 
 ## Enum Definitions
@@ -307,6 +307,6 @@ function generateExcerpt(content: string, maxLength: number = 300): string {
 | Date | Change | Reason |
 |------|--------|--------|
 | 2026-03-07 | Initial creation | Phase 1 core data model spec |
-| 2026-06-14 | Add knowledge-metadata layer (`verified`, `verifiedAt`, `sources[]`, `relatedSlugs`, `reviewDueAt`) + `VerifiedState`/`ArticleSource`; mark `sourceUrl`/`sourceType` legacy; fix stale Drizzle block (SQLite → PostgreSQL) | ADR-017: trust/freshness layer for the knowledge archive (derived from Dooray #29 verify, #46 RAG) |
+| 2026-06-14 | Add knowledge-metadata layer (`verified`, `verifiedAt`, `sources[]`, `relatedSlugs`, `reviewDueAt`) + `VerifiedState`/`ArticleSource`; mark `sourceUrl`/`sourceType` legacy; fix stale Drizzle block (SQLite → PostgreSQL) | ADR-017: trust/freshness layer for the knowledge archive (verification state, later a RAG ranking weight) |
 | 2026-03-10 | Drizzle schema: SQLite → PostgreSQL (pgTable, uuid, timestamp) | DB stack changed to PostgreSQL via Supabase |
 | 2026-03-10 | Added sourceUrl, sourceType to Drizzle schema, Zod schemas, and example data | Fields were defined in Field Definitions but missing from code specs |
