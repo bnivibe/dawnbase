@@ -13,10 +13,9 @@ and assert facts that can go out of date. Today an article carries only a single
 `sourceType` pair and has **no notion of trust or freshness** — there is no way to express "this article's
 claims were verified on date X", "this is due for a re-check", or "these are the multiple sources behind it".
 
-This is the same gap addressed by a separate, real-world knowledge system (NHN FashionGo's Claude
-`knowledge` workflow): its `verify` mode (Dooray #29) tracks per-claim verification state against a source
-of truth, and its RAG plan (Dooray #46) uses that verification state as a search-ranking weight. The
-analysis of that system is archived under `~/Documents/dooray-insights/`.
+The same gap shows up in agent-maintained knowledge bases in general. A `verify` step tracks per-claim
+verification state against a source of truth, and a RAG layer can use that verification state as a
+search-ranking weight.
 
 dawnbase is also mid-decision on a **DB → file-based** migration. Any metadata we add must work
 identically whether articles live in PostgreSQL columns or in markdown frontmatter, so the migration
@@ -42,9 +41,9 @@ storage mechanism differs (Drizzle columns now; the same fields as gray-matter f
 ### 1. A knowledge archive needs trust signals
 `unverified` vs `stale` vs `verified` is the core distinction the archive currently can't express. A
 boolean would collapse "never checked" and "checked but now outdated" into one — exactly the failure mode
-the source-of-truth `verify` system (Dooray #29) was built to avoid.
+a source-of-truth `verify` step exists to avoid.
 
-### 2. Backward compatible by construction (Dooray #25 "통합 ≠ 병합")
+### 2. Backward compatible by construction ("integrate, don't merge")
 All new fields are nullable or defaulted. `verified` defaults to `unverified`, so the migration is purely
 additive and existing rows are valid without backfill. The legacy `sourceUrl`/`sourceType` pair is
 retained; a `resolveSources()` adapter maps it into the new `sources[]` shape on read. `relatedSlugs` is a
@@ -55,8 +54,8 @@ One shared shape across DB and files removes a blocker from the DB→file plan (
 
 ### 4. Foundation for later features
 `verified` becomes the badge signal in the UI and the ranking weight for a future "ask my archive" RAG
-feature (Dooray #46). `reviewDueAt` powers a "stale sweep" that flags articles due for re-check
-(mirrors the `daily-check` idea in Dooray #29).
+feature. `reviewDueAt` powers a "stale sweep" that flags articles due for re-check
+(a daily re-check pass).
 
 ## Scope
 
@@ -91,7 +90,3 @@ search feature.
 
 ## References
 - ADR-016 — NotebookLM analysis layer (related Phase 1.2 direction)
-- Dooray #29 — Knowledge verify mode (source-of-truth verification)
-- Dooray #46 — Knowledge RAG (verification state as ranking weight)
-- Dooray #25 — project-analyze ↔ knowledge (loose cross-reference principle)
-- Analysis archive: `~/Documents/dooray-insights/`
