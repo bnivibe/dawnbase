@@ -21,3 +21,4 @@ A list of Architecture Decision Records (ADRs) documenting the project's key tec
 | [015](./015-browser-admin-publish.md) | Browser Admin Publish Before Phase 4 Auth | Accepted | 2026-03-08 |
 | [016](./016-notebooklm-analysis-layer.md) | Use NotebookLM as the Analysis Layer for URL Content | Planned | 2026-03-08 |
 | [017](./017-article-knowledge-metadata.md) | Article Knowledge-Metadata Layer (verification, multi-source, relations) | Accepted | 2026-06-14 |
+| [018](./018-dependency-security-update-2026-10.md) | Dependency Security Update (Dependabot, October 2026) | Accepted | 2026-10-20 |
