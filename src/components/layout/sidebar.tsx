@@ -15,7 +15,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { logoutAction } from "@/actions/admin";
 import {
   Tooltip,
@@ -166,15 +166,20 @@ export function Sidebar({ isAdmin }: { isAdmin?: boolean }) {
             </Button>
           </form>
         ) : (
-          <Button
-            variant="ghost"
-            size={collapsed ? "icon" : "default"}
-            className={cn("w-full", collapsed ? "" : "justify-start gap-2")}
-            render={<Link href="/admin/login" />}
+          <Link
+            href="/admin/login"
+            className={cn(
+              buttonVariants({
+                variant: "ghost",
+                size: collapsed ? "icon" : "default",
+              }),
+              "w-full",
+              collapsed ? "" : "justify-start gap-2"
+            )}
           >
             <LogIn className="size-4 shrink-0" />
             {!collapsed && <span>Admin</span>}
-          </Button>
+          </Link>
         )}
 
         {/* Collapse toggle */}
