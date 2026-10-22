@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
@@ -67,9 +67,12 @@ export default async function ArticleDetailPage({
     <div className="mx-auto max-w-3xl space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" render={<Link href="/articles" />}>
+        <Link
+          href="/articles"
+          className={buttonVariants({ variant: "ghost", size: "icon" })}
+        >
           <ArrowLeft className="size-4" />
-        </Button>
+        </Link>
         <span className="text-sm text-muted-foreground">Back to Articles</span>
       </div>
 
